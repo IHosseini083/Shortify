@@ -23,6 +23,8 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
+    MONGODB_URI: str
+
     class Config:
         # Place your .env file under this path
         env_file = "shortify/.env"

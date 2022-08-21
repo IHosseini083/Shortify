@@ -5,6 +5,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from shortify.app import api
 from shortify.app.core.config import settings
+from shortify.app.db import init_db
 
 app = FastAPI(
     debug=settings.DEBUG,
@@ -28,6 +29,12 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+
+@app.on_event("startup")
+async def on_startup() -> None:
+    """Initialize services on startup."""
+    await init_db.init()
 
 
 # Custom HTTPException handler
