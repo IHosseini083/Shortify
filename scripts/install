@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+POETRY_PATH="${HOME}/.local/share/pypoetry"
+POETRY_LOCKFILE="poetry.lock"
+VENV=".venv"
+
+if [ ! -d "$POETRY_PATH" ] ; then
+    echo "Poetry not found, please first install poetry and then try again."
+    exit 1
+fi
+
+# Configure poetry to install virtualenv in project directory
+poetry config --local virtualenvs.in-project true
+
+if [ ! -d "$VENV" ] ; then
+    poetry env use python3
+fi
+
+if [ ! -f "$POETRY_LOCKFILE" ] ; then
+    poetry install -vvv
+fi
