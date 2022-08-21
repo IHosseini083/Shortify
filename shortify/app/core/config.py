@@ -4,7 +4,7 @@ from pydantic import AnyHttpUrl, BaseSettings, validator
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "Shortify"
     PROJECT_VERSION: str = "0.0.1"
     API_V1_STR: str = "v1"
     DEBUG: bool = True
