@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import ORJSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from shortify.app import api
@@ -12,9 +12,11 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION,
     description="Fast and reliable URL shortener powered by FastAPI and MongoDB.",
-    # Set current documentation page to v1
+    # Set current documentation specs to v1
     openapi_url=f"/api/{settings.API_V1_STR}/openapi.json",
-    redoc_url=None,  # disable ReDoc documentation
+    docs_url=None,
+    redoc_url=None,
+    default_response_class=ORJSONResponse,
 )
 
 # Add the router responsible for all /api/ endpoint requests
@@ -39,7 +41,7 @@ async def on_startup() -> None:
 
 # Custom HTTPException handler
 @app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(_, exc: StarletteHTTPException) -> JSONResponse:
+async def http_exception_handler(_, exc: StarletteHTTPException) -> ORJSONResponse:
     errors = {
         400: "BAD_REQUEST",
         401: "UNAUTHORIZED",
@@ -50,7 +52,7 @@ async def http_exception_handler(_, exc: StarletteHTTPException) -> JSONResponse
         409: "CONFLICT",
         500: "INTERNAL_SERVER_ERROR",
     }
-    return JSONResponse(
+    return ORJSONResponse(
         content={
             "status": errors.get(exc.status_code, f"ERROR_{exc.status_code}"),
             "message": exc.detail,
