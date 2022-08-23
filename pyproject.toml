@@ -11,6 +11,8 @@ repository = "https://github.com/IHosseini/Shortify"
 python = "^3.8"
 fastapi = {extras = ["all"], version = "^0.79.1"}
 beanie = "^1.11.9"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

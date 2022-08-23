@@ -1,3 +1,4 @@
+import secrets
 from typing import List, Union
 
 from pydantic import AnyHttpUrl, BaseSettings, validator
@@ -24,6 +25,10 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     MONGODB_URI: str
+
+    # 60 minutes * 24 hours * 1 = 1 day
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 1
+    SECRET_KEY: str = secrets.token_urlsafe(32)
 
     class Config:
         # Place your .env file under this path
