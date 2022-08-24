@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from shortify.app import api
@@ -18,6 +19,8 @@ app = FastAPI(
     redoc_url=None,
     default_response_class=ORJSONResponse,
 )
+
+app.mount("/static", StaticFiles(directory="shortify/app/static"), name="static")
 
 # Add the router responsible for all /api/ endpoint requests
 app.include_router(api.router)

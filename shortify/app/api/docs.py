@@ -12,5 +12,5 @@ async def get_docs() -> HTMLResponse:
     return get_swagger_ui_html(
         openapi_url=f"/api/{settings.API_V1_STR}/openapi.json",
         title=f"{settings.PROJECT_NAME} | Docs {settings.API_V1_STR}",
-        # TODO: Set a custom favicon URL
+        swagger_favicon_url="/static/img/favicon.png",
     )
