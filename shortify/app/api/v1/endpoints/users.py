@@ -67,7 +67,13 @@ async def get_user_by_username(
     _=Depends(get_current_active_superuser),
 ) -> UserModel:
     """Get a specific user by username."""
-    return await UserModel.get_by_username(username=username)
+    user = await UserModel.get_by_username(username=username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The user with this username does not exist",
+        )
+    return user
 
 
 @router.patch("/{username}", response_model=schemas.User)
