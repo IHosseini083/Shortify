@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from beanie import Document, Indexed
+from beanie import Document, Indexed, Link
 from pydantic import EmailStr
 from pydantic.fields import Field
 
 from shortify.app.core.security import verify_password
+from shortify.app.models.url import ShortUrl
 
 
 class User(Document):
@@ -15,6 +16,7 @@ class User(Document):
     is_active: bool = True
     is_superuser: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    urls: List[Link[ShortUrl]] = Field(default_factory=list)
 
     @classmethod
     async def get_by_username(cls, *, username: str) -> Optional["User"]:

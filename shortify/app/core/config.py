@@ -6,6 +6,7 @@ from pydantic.networks import EmailStr
 
 
 class Settings(BaseSettings):
+    # Application
     PROJECT_NAME: str = "Shortify"
     PROJECT_VERSION: str = "0.0.1"
     API_V1_STR: str = "v1"
@@ -25,15 +26,20 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
+    # Database
     MONGODB_URI: str
 
+    # Superuser
     FIRST_SUPERUSER: str
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
 
-    # 60 minutes * 24 hours * 1 = 1 day
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 1
+    # Authentication
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 1  # 60 minutes * 24 hours * 1 = 1 day
     SECRET_KEY: str = secrets.token_urlsafe(32)
+
+    # URLs
+    URL_IDENT_LENGTH: int = 7
 
     class Config:
         # Place your .env file under this path
