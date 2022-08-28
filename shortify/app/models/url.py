@@ -39,6 +39,10 @@ class ShortUrl(Document):
     async def get_by_ident(cls, *, ident: str) -> Optional["ShortUrl"]:
         return await cls.find_one(cls.ident == ident)
 
+    @classmethod
+    async def get_by_origin(cls, *, origin: str) -> Optional["ShortUrl"]:
+        return await cls.find_one(cls.origin == origin)
+
     class Settings:
         name = "urls"
         use_state_management = True

@@ -17,9 +17,10 @@ async def shorten_url(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The URL associated with this slug already exists",
         )
-    short_url = await ShortUrl.shorten(url=payload.url, slug=payload.slug)
-    current_user.urls.append(short_url)  # type: ignore[arg-type]
-    # Because we already save the short URL to db, we don't need to
-    # set the 'link_rule' to 'WriteRules.WRITE'
-    await current_user.save()
+    if not (short_url := await ShortUrl.get_by_origin(origin=payload.url)):
+        short_url = await ShortUrl.shorten(url=payload.url, slug=payload.slug)
+        current_user.urls.append(short_url)  # type: ignore[arg-type]
+        # Because we've already saved the short URL to db, we don't need to
+        # set the 'link_rule' to 'WriteRules.WRITE'
+        await current_user.save()
     return short_url
