@@ -3,7 +3,7 @@ from datetime import datetime
 from hashlib import md5
 from typing import Optional
 
-from beanie import Document, Indexed
+from beanie import Document, Indexed, PydanticObjectId
 from pydantic import Field
 
 from shortify.app.core.config import settings
@@ -20,15 +20,23 @@ class ShortUrl(Document):
     origin: str
     views: int = 0
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    # TODO: Add a TLL index for document expiration
+    # TODO: Add a TLL index for short URL expiration
     slug: Optional[Indexed(str, unique=True)] = None  # type: ignore[valid-type]
+    user_id: Optional[PydanticObjectId] = None
 
     @classmethod
-    async def shorten(cls, *, url: str, slug: Optional[str] = None) -> "ShortUrl":
+    async def shorten(
+        cls,
+        *,
+        url: str,
+        slug: Optional[str] = None,
+        user_id: Optional[PydanticObjectId] = None,
+    ) -> "ShortUrl":
         return await cls(
             ident=generate_ident(url, settings.URL_IDENT_LENGTH),
             origin=url,
             slug=slug,
+            user_id=user_id,
         ).insert()
 
     @classmethod
