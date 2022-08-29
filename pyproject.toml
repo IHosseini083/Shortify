@@ -9,7 +9,7 @@ repository = "https://github.com/IHosseini/Shortify"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = {extras = ["all"], version = "^0.80.0"}
+fastapi = {extras = ["all"], version = "^0.81.0"}
 beanie = "^1.11.9"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
@@ -20,7 +20,7 @@ pre-commit = "^2.20.0"
 isort = "^5.10.1"
 mypy = "^0.971"
 flake8 = "^5.0.4"
-autoflake = "^1.4"
+autoflake = "^1.5.1"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/IHosseini/Shortify/issues"
