@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 from hashlib import md5
 from typing import Optional
 
@@ -20,7 +20,9 @@ class ShortUrl(Document):
     origin: str
     views: int = 0
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    # TODO: Add a TLL index for short URL expiration
+    expires_at: Optional[  # type: ignore[valid-type]
+        Indexed(datetime, expireAfterSeconds=0)
+    ] = None
     slug: Optional[Indexed(str, unique=True)] = None  # type: ignore[valid-type]
     user_id: Optional[PydanticObjectId] = None
 
@@ -30,12 +32,18 @@ class ShortUrl(Document):
         *,
         url: str,
         slug: Optional[str] = None,
+        expiration_days: Optional[float] = None,
         user_id: Optional[PydanticObjectId] = None,
     ) -> "ShortUrl":
         return await cls(
             ident=generate_ident(url, settings.URL_IDENT_LENGTH),
             origin=url,
             slug=slug,
+            expires_at=(
+                datetime.utcnow() + timedelta(days=expiration_days)
+                if expiration_days
+                else None
+            ),
             user_id=user_id,
         ).insert()
 

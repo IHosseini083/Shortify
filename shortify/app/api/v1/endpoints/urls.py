@@ -21,6 +21,7 @@ async def shorten_url(
         short_url = await ShortUrl.shorten(
             url=payload.url,
             slug=payload.slug,
+            expiration_days=payload.expiration_days,
             user_id=current_user.id,
         )
     return short_url

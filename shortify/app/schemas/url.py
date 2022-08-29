@@ -7,6 +7,7 @@ from pydantic import AnyUrl, BaseModel, Field, validator
 class ShortUrlCreate(BaseModel):
     url: AnyUrl
     slug: Optional[str] = Field(None, max_length=64, min_length=3)
+    expiration_days: Optional[float] = Field(None, ge=0.0)
 
     @validator("slug")
     def slug_normalizer(cls, slug: Optional[str]) -> Optional[str]:  # noqa
@@ -20,6 +21,7 @@ class ShortUrl(BaseModel):
     origin: AnyUrl
     views: int
     created_at: datetime
+    expires_at: Optional[datetime] = None
     slug: Optional[str] = None
 
     class Config:
