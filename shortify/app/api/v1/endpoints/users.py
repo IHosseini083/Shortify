@@ -9,7 +9,7 @@ from shortify.app.api.v1.deps import (
     get_current_active_user,
 )
 from shortify.app.core.security import get_password_hash
-from shortify.app.models import User as UserModel
+from shortify.app.models import User
 
 router = APIRouter()
 
@@ -20,16 +20,16 @@ async def get_users(
     limit: int = 100,
     _=Depends(get_current_active_superuser),
 ):
-    return await UserModel.find_all(skip, limit).to_list()
+    return await User.find_all(skip, limit).to_list()
 
 
 @router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 async def create_user(
     user_in: schemas.UserCreate,
     _=Depends(get_current_active_superuser),
-) -> UserModel:
+) -> User:
     """Create new user in the database."""
-    user = await UserModel.get_by_username(username=user_in.username)
+    user = await User.get_by_username(username=user_in.username)
     if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -37,11 +37,11 @@ async def create_user(
         )
     data = user_in.dict()
     data["hashed_password"] = get_password_hash(data.pop("password"))
-    return await UserModel(**data).insert()
+    return await User(**data).insert()
 
 
 @router.get("/me", response_model=schemas.User)
-def get_current_user(user: UserModel = Depends(get_current_active_user)) -> UserModel:
+def get_current_user(user: User = Depends(get_current_active_user)) -> User:
     """Get current active user details."""
     return user
 
@@ -50,8 +50,8 @@ def get_current_user(user: UserModel = Depends(get_current_active_user)) -> User
 async def update_current_user(
     password: Optional[str] = Body(None),
     email: Optional[EmailStr] = Body(None),
-    user: UserModel = Depends(get_current_active_user),
-) -> UserModel:
+    user: User = Depends(get_current_active_user),
+) -> User:
     """Update current user using provided data."""
     if password is not None:
         user.hashed_password = get_password_hash(password)
@@ -65,9 +65,9 @@ async def update_current_user(
 async def get_user_by_username(
     username: str,
     _=Depends(get_current_active_superuser),
-) -> UserModel:
+) -> User:
     """Get a specific user by username."""
-    user = await UserModel.get_by_username(username=username)
+    user = await User.get_by_username(username=username)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -81,9 +81,9 @@ async def update_user_by_username(
     username: str,
     user_in: schemas.UserUpdate,
     _=Depends(get_current_active_superuser),
-) -> UserModel:
+) -> User:
     """Update a specific user by username."""
-    user = await UserModel.get_by_username(username=username)
+    user = await User.get_by_username(username=username)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
