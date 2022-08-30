@@ -3,7 +3,10 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from shortify.app import schemas
-from shortify.app.api.v1.deps import get_current_active_superuser
+from shortify.app.api.v1.deps import (
+    get_current_active_superuser,
+    get_current_active_user,
+)
 from shortify.app.models import ShortUrl, User
 
 router = APIRouter()
@@ -21,7 +24,7 @@ async def get_urls(
 @router.post("/shorten", response_model=schemas.ShortUrl)
 async def shorten_url(
     payload: schemas.ShortUrlCreate,
-    user: User = Depends(get_current_active_superuser),
+    user: User = Depends(get_current_active_user),
 ) -> ShortUrl:
     if payload.slug and await ShortUrl.get_by_slug(slug=payload.slug):
         raise HTTPException(
