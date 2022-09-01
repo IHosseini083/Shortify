@@ -1,7 +1,7 @@
 from datetime import timedelta
-from typing import Dict
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from shortify.app import models, schemas
@@ -24,7 +24,7 @@ router = APIRouter(
 )
 async def generate_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
-) -> Dict[str, str]:
+) -> ORJSONResponse:
     """Get an access token for future requests."""
     user = await models.User.authenticate(
         username=form_data.username,
@@ -41,10 +41,12 @@ async def generate_access_token(
             detail="Inactive user",
         )
     expires_in = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return {
-        "access_token": security.create_access_token(
-            user.id,
-            expires_delta=expires_in,
-        ),
-        "token_type": "bearer",
-    }
+    return ORJSONResponse(
+        content={
+            "access_token": security.create_access_token(
+                user.id,
+                expires_delta=expires_in,
+            ),
+            "token_type": "bearer",
+        },
+    )
