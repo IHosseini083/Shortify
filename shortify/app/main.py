@@ -8,6 +8,21 @@ from shortify.app import api
 from shortify.app.core.config import settings
 from shortify.app.db import init_db
 
+tags_metadata = [
+    {
+        "name": "Authentication",
+        "description": "Get authentication token",
+    },
+    {
+        "name": "Users",
+        "description": "User registration and management",
+    },
+    {
+        "name": "URLs",
+        "description": "Shorten and manage URLs",
+    },
+]
+
 app = FastAPI(
     debug=settings.DEBUG,
     title=settings.PROJECT_NAME,
@@ -18,6 +33,11 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
     default_response_class=ORJSONResponse,
+    openapi_tags=tags_metadata,
+    license_info={
+        "name": "GNU General Public License v3.0",
+        "url": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+    },
 )
 
 app.mount("/static", StaticFiles(directory="shortify/app/static"), name="static")
