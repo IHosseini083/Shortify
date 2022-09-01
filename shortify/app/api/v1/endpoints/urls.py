@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
@@ -12,13 +12,21 @@ from shortify.app.models import ShortUrl, User
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.ShortUrl])
+@router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_urls(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(10, ge=1),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(10, ge=1, le=100),
     _=Depends(get_current_active_superuser),
-) -> List[ShortUrl]:
-    return await ShortUrl.find_all(skip, limit).to_list()
+) -> Dict[str, Any]:
+    results = (
+        await ShortUrl.find().skip((page - 1) * per_page).limit(per_page).to_list()
+    )
+    return {
+        "page": page,
+        "per_page": per_page,
+        "total": await ShortUrl.count(),
+        "results": results,
+    }
 
 
 @router.get("/{ident}", response_model=schemas.ShortUrl)

@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
 from pydantic.networks import EmailStr
 
 from shortify.app import schemas
@@ -14,13 +14,19 @@ from shortify.app.models import User
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model=schemas.Paginated[schemas.User])
 async def get_users(
-    skip: int = 0,
-    limit: int = 100,
+    page: int = Query(1, ge=1),
+    per_page: int = Query(10, ge=1, le=100),
     _=Depends(get_current_active_superuser),
-):
-    return await User.find_all(skip, limit).to_list()
+) -> Dict[str, Any]:
+    results = await User.find().skip((page - 1) * per_page).limit(per_page).to_list()
+    return {
+        "page": page,
+        "per_page": per_page,
+        "total": await User.count(),
+        "results": results,
+    }
 
 
 @router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
