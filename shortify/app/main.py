@@ -45,19 +45,8 @@ async def on_startup() -> None:
 # Custom HTTPException handler
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(_, exc: StarletteHTTPException) -> ORJSONResponse:
-    errors = {
-        400: "BAD_REQUEST",
-        401: "UNAUTHORIZED",
-        403: "FORBIDDEN",
-        404: "NOT_FOUND",
-        405: "METHOD_NOT_ALLOWED",
-        406: "NOT_ACCEPTABLE",
-        409: "CONFLICT",
-        500: "INTERNAL_SERVER_ERROR",
-    }
     return ORJSONResponse(
         content={
-            "status": errors.get(exc.status_code, f"ERROR_{exc.status_code}"),
             "message": exc.detail,
         },
         status_code=exc.status_code,
