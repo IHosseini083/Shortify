@@ -24,18 +24,13 @@ async def get_urls(
 @router.get("/{ident}", response_model=schemas.ShortUrl)
 async def get_short_url(
     ident: str,
-    user: User = Depends(get_current_active_user),
+    _=Depends(get_current_active_superuser),
 ) -> ShortUrl:
     short_url = await ShortUrl.get_by_ident(ident=ident)
     if not short_url:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Short URL with ID {ident!r} does not exist",
-        )
-    if user.id != short_url.user_id and not user.is_superuser:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user doesn't have enough privileges",
         )
     return short_url
 
