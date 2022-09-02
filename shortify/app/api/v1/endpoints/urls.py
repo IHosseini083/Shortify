@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from shortify.app import schemas
 from shortify.app.api.v1.deps import (
@@ -21,16 +21,13 @@ def short_url_not_found(ident: str) -> HTTPException:
 
 @router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_urls(
-    page: int = Query(1, ge=1),
-    per_page: int = Query(10, ge=1, le=100),
+    params: schemas.PaginationParams = Depends(),
     _=Depends(get_current_active_superuser),
 ) -> Dict[str, Any]:
-    results = (
-        await ShortUrl.find().skip((page - 1) * per_page).limit(per_page).to_list()
-    )
+    results = await ShortUrl.find().skip(params.skip).limit(params.limit).to_list()
     return {
-        "page": page,
-        "per_page": per_page,
+        "page": params.page,
+        "per_page": params.per_page,
         "total": await ShortUrl.count(),
         "results": results,
     }
