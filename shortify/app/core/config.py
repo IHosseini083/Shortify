@@ -1,8 +1,7 @@
 import secrets
 from typing import List, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, validator
-from pydantic.networks import EmailStr
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
 
 
 class Settings(BaseSettings):
@@ -11,7 +10,7 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = "0.0.4"
     API_V1_STR: str = "v1"
     DEBUG: bool = True
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
 
     # Custom validators that have 'pre' set to 'True', will be called before
     # all standard pydantic validators.
