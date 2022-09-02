@@ -68,11 +68,10 @@ async def shorten_url(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The URL associated with this slug already exists.",
         )
-    if not (short_url := await ShortUrl.get_by_origin(origin=payload.url)):
-        short_url = await ShortUrl.shorten(
-            url=payload.url,
-            slug=payload.slug,
-            expiration_days=payload.expiration_days,
-            user_id=user.id,
-        )
+    short_url = await ShortUrl.shorten(
+        url=payload.url,
+        slug=payload.slug,
+        expiration_days=payload.expiration_days,
+        user_id=user.id,
+    )
     return short_url
