@@ -12,6 +12,13 @@ from shortify.app.models import ShortUrl, User
 router = APIRouter()
 
 
+def short_url_not_found(ident: str) -> HTTPException:
+    return HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Short URL with identifier {ident!r} not found.",
+    )
+
+
 @router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_urls(
     page: int = Query(1, ge=1),
@@ -36,11 +43,19 @@ async def get_short_url(
 ) -> ShortUrl:
     short_url = await ShortUrl.get_by_ident(ident=ident)
     if not short_url:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Short URL with ID {ident!r} does not exist",
-        )
+        raise short_url_not_found(ident=ident)
     return short_url
+
+
+@router.delete("/{ident}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_short_url(
+    ident: str,
+    _=Depends(get_current_active_superuser),
+) -> None:
+    short_url = await ShortUrl.get_by_ident(ident=ident)
+    if not short_url:
+        raise short_url_not_found(ident=ident)
+    await short_url.delete()
 
 
 @router.post("/shorten", response_model=schemas.ShortUrl)
