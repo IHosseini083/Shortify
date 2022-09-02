@@ -6,6 +6,17 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.0.4] (2022-09-02)
+
+### Added
+
+- Add pagination to the list of users and urls in the `/users` and `/urls` endpoints.
+- Support `DELETE /urls/{ident}` requests to delete a short URL.
+
+### Changed
+
+- Return a unique short URL every time we attempt to shorten a URL.
+
 ## [0.0.3] (2022-09-01)
 
 ### Added
@@ -34,4 +45,5 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 [0.0.2]: https://github.com/IHosseini083/Shortify/releases/tag/v0.0.2
 [0.0.3]: https://github.com/IHosseini083/Shortify/compare/v0.0.2...v0.0.3
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.3...HEAD
+[0.0.4]: https://github.com/IHosseini083/Shortify/compare/v0.0.3...v0.0.4
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.4...HEAD
