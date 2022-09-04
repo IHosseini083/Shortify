@@ -1,12 +1,15 @@
 import random
 from datetime import datetime, timedelta
 from hashlib import md5
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from beanie import Document, Indexed, PydanticObjectId
 from pydantic import Field
 
 from shortify.app.core.config import settings
+
+if TYPE_CHECKING:
+    from shortify.app.schemas import PaginationParams
 
 
 def generate_ident(url: str, length: int) -> str:
@@ -58,6 +61,20 @@ class ShortUrl(Document):
     @classmethod
     async def get_by_origin(cls, *, origin: str) -> Optional["ShortUrl"]:
         return await cls.find_one(cls.origin == origin)
+
+    @classmethod
+    async def get_by_user(
+        cls,
+        *,
+        user_id: PydanticObjectId,
+        params: "PaginationParams",
+    ) -> List["ShortUrl"]:
+        return (
+            await cls.find(cls.user_id == user_id)
+            .skip(params.skip)
+            .limit(params.limit)
+            .to_list()
+        )
 
     class Settings:
         name = "urls"

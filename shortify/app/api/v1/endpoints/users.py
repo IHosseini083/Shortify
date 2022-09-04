@@ -9,9 +9,16 @@ from shortify.app.api.v1.deps import (
     get_current_active_user,
 )
 from shortify.app.core.security import get_password_hash
-from shortify.app.models import User
+from shortify.app.models import ShortUrl, User
 
 router = APIRouter()
+
+
+def user_not_found_error() -> HTTPException:
+    return HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="The user with this username does not exist.",
+    )
 
 
 @router.get("/", response_model=schemas.Paginated[schemas.User])
@@ -51,6 +58,21 @@ def get_current_user(user: User = Depends(get_current_active_user)) -> User:
     return user
 
 
+@router.get("/me/urls", response_model=schemas.Paginated[schemas.ShortUrl])
+async def get_current_user_urls(
+    params: schemas.PaginationParams = Depends(),
+    user: User = Depends(get_current_active_user),
+) -> Dict[str, Any]:
+    """Get current active user's short urls."""
+    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    return {
+        "page": params.page,
+        "per_page": params.per_page,
+        "total": await ShortUrl.find(ShortUrl.user_id == user.id).count(),
+        "results": results,
+    }
+
+
 @router.patch("/me", response_model=schemas.User)
 async def update_current_user(
     password: Optional[str] = Body(None),
@@ -74,11 +96,27 @@ async def get_user_by_username(
     """Get a specific user by username."""
     user = await User.get_by_username(username=username)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="The user with this username does not exist",
-        )
+        raise user_not_found_error()
     return user
+
+
+@router.get("/{username}/urls", response_model=schemas.Paginated[schemas.ShortUrl])
+async def get_user_urls(
+    username: str,
+    params: schemas.PaginationParams = Depends(),
+    _=Depends(get_current_active_superuser),
+) -> Dict[str, Any]:
+    """Get a specific user's short urls."""
+    user = await User.get_by_username(username=username)
+    if not user:
+        raise user_not_found_error()
+    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    return {
+        "page": params.page,
+        "per_page": params.per_page,
+        "total": await ShortUrl.find(ShortUrl.user_id == user.id).count(),
+        "results": results,
+    }
 
 
 @router.patch("/{username}", response_model=schemas.User)
@@ -90,10 +128,7 @@ async def update_user_by_username(
     """Update a specific user by username."""
     user = await User.get_by_username(username=username)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="The user with this username does not exist",
-        )
+        raise user_not_found_error()
     update_data = user_in.dict(exclude_unset=True)
     await user.set(update_data)
     return user
