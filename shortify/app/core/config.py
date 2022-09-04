@@ -7,7 +7,7 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
 class Settings(BaseSettings):
     # Application
     PROJECT_NAME: str = "Shortify"
-    PROJECT_VERSION: str = "0.0.4"
+    PROJECT_VERSION: str = "0.0.5"
     API_V1_STR: str = "v1"
     DEBUG: bool = True
     BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
