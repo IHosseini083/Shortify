@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     class Config:
         # Place your .env file under this path
         env_file = "shortify/.env"
+        env_prefix = "SHORTIFY_"
         case_sensitive = True
 
 
