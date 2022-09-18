@@ -9,7 +9,7 @@ from pydantic import Field
 from shortify.app.core.config import settings
 
 if TYPE_CHECKING:
-    from shortify.app.schemas import PaginationParams
+    from shortify.app.schemas import PaginationParams, SortingParams
 
 
 def generate_ident(url: str, length: int) -> str:
@@ -67,12 +67,16 @@ class ShortUrl(Document):
         cls,
         *,
         user_id: PydanticObjectId,
-        params: "PaginationParams",
+        paging: "PaginationParams",
+        sorting: "SortingParams",
     ) -> List["ShortUrl"]:
         return (
             await cls.find(cls.user_id == user_id)
-            .skip(params.skip)
-            .limit(params.limit)
+            .skip(paging.skip)
+            .limit(paging.limit)
+            .sort(
+                (sorting.sort, sorting.order.direction),
+            )
             .to_list()
         )
 

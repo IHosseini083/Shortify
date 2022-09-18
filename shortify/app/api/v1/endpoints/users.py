@@ -23,13 +23,22 @@ def user_not_found_error() -> HTTPException:
 
 @router.get("/", response_model=schemas.Paginated[schemas.User])
 async def get_users(
-    params: schemas.PaginationParams = Depends(),
+    paging: schemas.PaginationParams = Depends(),
+    sorting: schemas.SortingParams = Depends(),
     _=Depends(get_current_active_superuser),
 ) -> Dict[str, Any]:
-    results = await User.find().skip(params.skip).limit(params.limit).to_list()
+    results = (
+        await User.find()
+        .skip(paging.skip)
+        .limit(paging.limit)
+        .sort(
+            (sorting.sort, sorting.order.direction),
+        )
+        .to_list()
+    )
     return {
-        "page": params.page,
-        "per_page": params.per_page,
+        "page": paging.page,
+        "per_page": paging.per_page,
         "total": await User.count(),
         "results": results,
     }
@@ -60,14 +69,19 @@ def get_current_user(user: User = Depends(get_current_active_user)) -> User:
 
 @router.get("/me/urls", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_current_user_urls(
-    params: schemas.PaginationParams = Depends(),
+    paging: schemas.PaginationParams = Depends(),
+    sorting: schemas.SortingParams = Depends(),
     user: User = Depends(get_current_active_user),
 ) -> Dict[str, Any]:
     """Get current active user's short urls."""
-    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    results = await ShortUrl.get_by_user(
+        user_id=user.id,
+        paging=paging,
+        sorting=sorting,
+    )
     return {
-        "page": params.page,
-        "per_page": params.per_page,
+        "page": paging.page,
+        "per_page": paging.per_page,
         "total": await ShortUrl.find(ShortUrl.user_id == user.id).count(),
         "results": results,
     }
@@ -103,17 +117,22 @@ async def get_user_by_username(
 @router.get("/{username}/urls", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_user_urls(
     username: str,
-    params: schemas.PaginationParams = Depends(),
+    paging: schemas.PaginationParams = Depends(),
+    sorting: schemas.SortingParams = Depends(),
     _=Depends(get_current_active_superuser),
 ) -> Dict[str, Any]:
     """Get a specific user's short urls."""
     user = await User.get_by_username(username=username)
     if not user:
         raise user_not_found_error()
-    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    results = await ShortUrl.get_by_user(
+        user_id=user.id,
+        paging=paging,
+        sorting=sorting,
+    )
     return {
-        "page": params.page,
-        "per_page": params.per_page,
+        "page": paging.page,
+        "per_page": paging.per_page,
         "total": await ShortUrl.find(ShortUrl.user_id == user.id).count(),
         "results": results,
     }

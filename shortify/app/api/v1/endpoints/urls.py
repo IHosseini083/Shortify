@@ -21,13 +21,22 @@ def short_url_not_found(ident: str) -> HTTPException:
 
 @router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
 async def get_urls(
-    params: schemas.PaginationParams = Depends(),
+    paging: schemas.PaginationParams = Depends(),
+    sorting: schemas.SortingParams = Depends(),
     _=Depends(get_current_active_superuser),
 ) -> Dict[str, Any]:
-    results = await ShortUrl.find().skip(params.skip).limit(params.limit).to_list()
+    results = (
+        await ShortUrl.find()
+        .skip(paging.skip)
+        .limit(paging.limit)
+        .sort(
+            (sorting.sort, sorting.order.direction),
+        )
+        .to_list()
+    )
     return {
-        "page": params.page,
-        "per_page": params.per_page,
+        "page": paging.page,
+        "per_page": paging.per_page,
         "total": await ShortUrl.count(),
         "results": results,
     }
