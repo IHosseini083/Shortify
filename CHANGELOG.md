@@ -6,6 +6,20 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.0.6] (2022-09-18)
+
+### Added
+
+- Add new sections to `README.md` file about the project's features and license.
+
+### Changed
+
+- Changed type annotation for `MONGODB_URL` config variable in `Settings` class to
+`pydantic.MongoDsn` instead of `str`. This change enables Pydantic to validate the
+MongoDB connection string.
+- Bump `black` pre-commit hook from 22.6.0 to 22.8.0
+- Bump `fastapi` from 0.81.0 to 0.82.0
+
 ## [0.0.5] (2022-09-05)
 
 ### Added
@@ -58,4 +72,5 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 [0.0.3]: https://github.com/IHosseini083/Shortify/compare/v0.0.2...v0.0.3
 [0.0.4]: https://github.com/IHosseini083/Shortify/compare/v0.0.3...v0.0.4
 [0.0.5]: https://github.com/IHosseini083/Shortify/compare/v0.0.4...v0.0.5
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...HEAD
+[0.0.6]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...v0.0.6
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.6...HEAD
