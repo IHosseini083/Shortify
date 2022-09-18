@@ -64,7 +64,7 @@ async def get_current_user_urls(
     user: User = Depends(get_current_active_user),
 ) -> Dict[str, Any]:
     """Get current active user's short urls."""
-    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    results = await ShortUrl.get_by_user(user_id=user.id, params=params)  # type: ignore[arg-type]
     return {
         "page": params.page,
         "per_page": params.per_page,
@@ -110,7 +110,10 @@ async def get_user_urls(
     user = await User.get_by_username(username=username)
     if not user:
         raise user_not_found_error()
-    results = await ShortUrl.get_by_user(user_id=user.id, params=params)
+    results = await ShortUrl.get_by_user(
+        user_id=user.id,  # type: ignore[arg-type]
+        params=params,
+    )
     return {
         "page": params.page,
         "per_page": params.per_page,
