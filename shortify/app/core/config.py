@@ -1,7 +1,7 @@
 import secrets
 from typing import List, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, MongoDsn, validator
 
 
 class Settings(BaseSettings):
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     # Database
-    MONGODB_URI: str
+    MONGODB_URI: MongoDsn
 
     # Superuser
     FIRST_SUPERUSER: str
