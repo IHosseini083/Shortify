@@ -15,8 +15,17 @@ _Shortify_ is a fast, fully async and reliable URL shortener RESTful API built w
 It uses the open source [MongoDB] database for storing shortened URLs data and implements user registration via
 OAuth2 JWT authentication.
 
-[FastAPI]: https://github.com/tiangolo/fastapi
-[MongoDB]: https://www.mongodb.com/
+## Features
+
+- Fully async and non-blocking.
+- Uses [FastAPI] framework for API development:
+- Uses [MongoDB] as data store for users and shortened URLs.
+- Extensible architecture for adding new API endpoints and services.
+- Descriptive and well-documented code.
+- OAuth2 (with hashed passwords and JWT tokens) based user authentication.
+- Uses [Poetry] for dependency management.
+- Automated code formatting and linting with [pre-commit] and [black].
+- [CORS (Cross Origin Resource Sharing)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) support.
 
 ## Requirements
 
@@ -24,4 +33,15 @@ OAuth2 JWT authentication.
 
 ## Documentation and Usage
 
+## License
+
+This project is licensed under the terms of the [GPL-3.0] license.
+
 <p align="center">&mdash; ⚡ &mdash;</p>
+
+[FastAPI]: https://github.com/tiangolo/fastapi "Modern, high-performance, web framework for building APIs with Python."
+[MongoDB]: https://www.mongodb.com/ "General purpose, document-based, distributed database."
+[Poetry]: https://python-poetry.org/ "Python dependency management and packaging made easy."
+[pre-commit]: https://pre-commit.com/ "A framework for managing and maintaining multi-language pre-commit hooks."
+[black]: https://github.com/psf/black "The uncompromising Python code formatter."
+[GPL-3.0]: https://www.gnu.org/licenses/gpl-3.0.en.html "GNU General Public License v3.0"

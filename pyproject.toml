@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "shortify"
-version = "0.0.5"
+version = "0.0.7"
 description = "Shortify is a URL shortener RESTful API built with Python and FastAPI."
 authors = ["Iliya <IHosseini083@gmail.com>"]
 license = "GPL-3.0-only"
@@ -9,7 +9,7 @@ repository = "https://github.com/IHosseini/Shortify"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = {extras = ["all"], version = "^0.81.0"}
+fastapi = {extras = ["all"], version = "^0.82.0"}
 beanie = "^1.11.9"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}

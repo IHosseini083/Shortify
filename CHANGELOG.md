@@ -6,6 +6,39 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.0.7] (2022-09-18)
+
+### Added
+
+- Create a `ConstrainedStr` subclass named `ConstrainedUsername` to validate username
+on user creation. The following rules are applied:
+
+  - The username must be between 3 and 64 characters long.
+  - All characters must be alphanumeric or one of the following: (`-`, `_`, `.`).
+  - All characters are converted to lowercase.
+  - Whitespaces are stripped from the beginning and end of the username.
+
+- Add a `SHORTIFY_` prefix to environment variables used by the application settings to avoid
+conflicts with other applications.
+
+### Fixed
+
+- Silent mypy error about `user.id` being `Optional[PydanticObjectId]` instead of `PydanticObjectId`.
+
+## [0.0.6] (2022-09-18)
+
+### Added
+
+- Add new sections to `README.md` file about the project's features and license.
+
+### Changed
+
+- Changed type annotation for `MONGODB_URL` config variable in `Settings` class to
+`pydantic.MongoDsn` instead of `str`. This change enables Pydantic to validate the
+MongoDB connection string.
+- Bump `black` pre-commit hook from 22.6.0 to 22.8.0
+- Bump `fastapi` from 0.81.0 to 0.82.0
+
 ## [0.0.5] (2022-09-05)
 
 ### Added
@@ -58,4 +91,6 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 [0.0.3]: https://github.com/IHosseini083/Shortify/compare/v0.0.2...v0.0.3
 [0.0.4]: https://github.com/IHosseini083/Shortify/compare/v0.0.3...v0.0.4
 [0.0.5]: https://github.com/IHosseini083/Shortify/compare/v0.0.4...v0.0.5
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...HEAD
+[0.0.6]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...v0.0.6
+[0.0.7]: https://github.com/IHosseini083/Shortify/compare/v0.0.6...v0.0.7
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.7...HEAD

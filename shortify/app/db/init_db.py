@@ -7,7 +7,7 @@ from shortify.app.models import User, gather_documents
 
 
 async def init() -> None:
-    client = AsyncIOMotorClient(settings.MONGODB_URI)
+    client = AsyncIOMotorClient(str(settings.MONGODB_URI))
     await init_beanie(
         database=client.shortify,
         document_models=gather_documents(),  # type: ignore[arg-type]

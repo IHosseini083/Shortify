@@ -1,13 +1,13 @@
 import secrets
 from typing import List, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, MongoDsn, validator
 
 
 class Settings(BaseSettings):
     # Application
     PROJECT_NAME: str = "Shortify"
-    PROJECT_VERSION: str = "0.0.5"
+    PROJECT_VERSION: str = "0.0.7"
     API_V1_STR: str = "v1"
     DEBUG: bool = True
     BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     # Database
-    MONGODB_URI: str
+    MONGODB_URI: MongoDsn
 
     # Superuser
     FIRST_SUPERUSER: str
@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     class Config:
         # Place your .env file under this path
         env_file = "shortify/.env"
+        env_prefix = "SHORTIFY_"
         case_sensitive = True
 
 
