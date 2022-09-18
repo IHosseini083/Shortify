@@ -6,6 +6,16 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.0.8] (2022-09-18)
+
+### Added
+
+- Implement sorting feature to endpoints that support pagination, #9 by @IHosseini083
+
+### Changed
+
+- Bump fastapi version from 0.82.0 to 0.85.0
+
 ## [0.0.7] (2022-09-18)
 
 ### Added
@@ -93,4 +103,5 @@ MongoDB connection string.
 [0.0.5]: https://github.com/IHosseini083/Shortify/compare/v0.0.4...v0.0.5
 [0.0.6]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...v0.0.6
 [0.0.7]: https://github.com/IHosseini083/Shortify/compare/v0.0.6...v0.0.7
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.7...HEAD
+[0.0.8]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.8
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...HEAD
