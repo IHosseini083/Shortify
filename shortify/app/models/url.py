@@ -26,6 +26,7 @@ class ShortUrl(Document):
     expires_at: Optional[  # type: ignore[valid-type]
         Indexed(datetime, expireAfterSeconds=0)
     ] = None
+    last_visit_at: Optional[datetime] = None
     slug: Optional[Indexed(str, unique=True)] = None  # type: ignore[valid-type]
     user_id: Optional[PydanticObjectId] = None
 
@@ -79,6 +80,12 @@ class ShortUrl(Document):
             )
             .to_list()
         )
+
+    @classmethod
+    async def visit(cls, *, instance: "ShortUrl") -> None:
+        instance.views += 1
+        instance.last_visit_at = datetime.utcnow()
+        await instance.save_changes()
 
     class Settings:
         name = "urls"
