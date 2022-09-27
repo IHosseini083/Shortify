@@ -44,6 +44,8 @@ app.mount("/static", StaticFiles(directory="shortify/app/static"), name="static"
 
 # Add the router responsible for all /api/ endpoint requests
 app.include_router(api.router)
+# Include redirection router in the main app
+app.include_router(api.redirect.router)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:

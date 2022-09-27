@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from shortify.app.api import docs, v1
+from shortify.app.api import docs, redirect, v1
 from shortify.app.core.config import settings
 
 router = APIRouter(prefix="/api")

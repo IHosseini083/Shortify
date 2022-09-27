@@ -12,10 +12,10 @@ from shortify.app.models import ShortUrl, User
 router = APIRouter()
 
 
-def short_url_not_found(ident: str) -> HTTPException:
+def short_url_not_found(ident_or_slug: str) -> HTTPException:
     return HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Short URL with identifier {ident!r} not found.",
+        detail=f"Short URL with identifier/slug {ident_or_slug!r} not found",
     )
 
 
@@ -49,7 +49,7 @@ async def get_short_url(
 ) -> ShortUrl:
     short_url = await ShortUrl.get_by_ident(ident=ident)
     if not short_url:
-        raise short_url_not_found(ident=ident)
+        raise short_url_not_found(ident)
     return short_url
 
 
@@ -60,7 +60,7 @@ async def delete_short_url(
 ) -> None:
     short_url = await ShortUrl.get_by_ident(ident=ident)
     if not short_url:
-        raise short_url_not_found(ident=ident)
+        raise short_url_not_found(ident)
     await short_url.delete()
 
 
