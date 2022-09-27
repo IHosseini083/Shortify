@@ -6,6 +6,19 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.0.9] (2022-09-27)
+
+### Added
+
+- Add new field to `ShortUrl` model for last visit date and time.
+- Add new class method to `ShortUrl` model for updating view count and last visit.
+- Implement redirection to long URL when short URL is accessed via its identifier.
+
+### Changed
+
+- Bump `pyupgrade` pre-commit hook to v2.38.0, #10.
+- Bump `beanie` from 1.11.9 to 1.11.11.
+
 ## [0.0.8] (2022-09-18)
 
 ### Added
@@ -103,5 +116,6 @@ MongoDB connection string.
 [0.0.5]: https://github.com/IHosseini083/Shortify/compare/v0.0.4...v0.0.5
 [0.0.6]: https://github.com/IHosseini083/Shortify/compare/v0.0.5...v0.0.6
 [0.0.7]: https://github.com/IHosseini083/Shortify/compare/v0.0.6...v0.0.7
-[0.0.8]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.8
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...HEAD
+[0.0.8]: https://github.com/IHosseini083/Shortify/compare/v0.0.7...v0.0.8
+[0.0.9]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.9
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...HEAD
