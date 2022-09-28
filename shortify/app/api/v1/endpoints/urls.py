@@ -8,6 +8,7 @@ from shortify.app.api.v1.deps import (
     get_current_active_user,
 )
 from shortify.app.models import ShortUrl, User
+from shortify.app.utils import cbv
 
 router = APIRouter()
 
@@ -19,65 +20,62 @@ def short_url_not_found(ident_or_slug: str) -> HTTPException:
     )
 
 
-@router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
-async def get_urls(
-    paging: schemas.PaginationParams = Depends(),
-    sorting: schemas.SortingParams = Depends(),
-    _=Depends(get_current_active_superuser),
-) -> Dict[str, Any]:
-    results = (
-        await ShortUrl.find()
-        .skip(paging.skip)
-        .limit(paging.limit)
-        .sort(
-            (sorting.sort, sorting.order.direction),
+@cbv(router)
+class BasicUserViews:
+    user: User = Depends(get_current_active_user)
+
+    @router.post("/shorten", response_model=schemas.ShortUrl)
+    async def shorten_url(self, payload: schemas.ShortUrlCreate) -> ShortUrl:
+        if payload.slug and await ShortUrl.get_by_slug(slug=payload.slug):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The URL associated with this slug already exists",
+            )
+        short_url = await ShortUrl.shorten(
+            url=payload.url,
+            slug=payload.slug,
+            expiration_days=payload.expiration_days,
+            user_id=self.user.id,
         )
-        .to_list()
-    )
-    return {
-        "page": paging.page,
-        "per_page": paging.per_page,
-        "total": await ShortUrl.count(),
-        "results": results,
-    }
+        return short_url
 
 
-@router.get("/{ident}", response_model=schemas.ShortUrl)
-async def get_short_url(
-    ident: str,
-    _=Depends(get_current_active_superuser),
-) -> ShortUrl:
-    short_url = await ShortUrl.get_by_ident(ident=ident)
-    if not short_url:
-        raise short_url_not_found(ident)
-    return short_url
+@cbv(router)
+class SuperuserViews:
+    superuser: User = Depends(get_current_active_superuser)
 
-
-@router.delete("/{ident}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_short_url(
-    ident: str,
-    _=Depends(get_current_active_superuser),
-) -> None:
-    short_url = await ShortUrl.get_by_ident(ident=ident)
-    if not short_url:
-        raise short_url_not_found(ident)
-    await short_url.delete()
-
-
-@router.post("/shorten", response_model=schemas.ShortUrl)
-async def shorten_url(
-    payload: schemas.ShortUrlCreate,
-    user: User = Depends(get_current_active_user),
-) -> ShortUrl:
-    if payload.slug and await ShortUrl.get_by_slug(slug=payload.slug):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The URL associated with this slug already exists.",
+    @router.get("/", response_model=schemas.Paginated[schemas.ShortUrl])
+    async def get_urls(
+        self,
+        paging: schemas.PaginationParams = Depends(),
+        sorting: schemas.SortingParams = Depends(),
+    ) -> Dict[str, Any]:
+        results = (
+            await ShortUrl.find()
+            .skip(paging.skip)
+            .limit(paging.limit)
+            .sort(
+                (sorting.sort, sorting.order.direction),
+            )
+            .to_list()
         )
-    short_url = await ShortUrl.shorten(
-        url=payload.url,
-        slug=payload.slug,
-        expiration_days=payload.expiration_days,
-        user_id=user.id,
-    )
-    return short_url
+        return {
+            "page": paging.page,
+            "per_page": paging.per_page,
+            "total": await ShortUrl.count(),
+            "results": results,
+        }
+
+    @router.get("/{ident}", response_model=schemas.ShortUrl)
+    async def get_short_url(self, ident: str) -> ShortUrl:
+        short_url = await ShortUrl.get_by_ident(ident=ident)
+        if not short_url:
+            raise short_url_not_found(ident)
+        return short_url
+
+    @router.delete("/{ident}", status_code=status.HTTP_204_NO_CONTENT)
+    async def delete_short_url(self, ident: str) -> None:
+        short_url = await ShortUrl.get_by_ident(ident=ident)
+        if not short_url:
+            raise short_url_not_found(ident)
+        await short_url.delete()
