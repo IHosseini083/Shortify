@@ -60,10 +60,6 @@ class ShortUrl(Document):
         return await cls.find_one(cls.ident == ident)
 
     @classmethod
-    async def get_by_origin(cls, *, origin: str) -> Optional["ShortUrl"]:
-        return await cls.find_one(cls.origin == origin)
-
-    @classmethod
     async def get_by_user(
         cls,
         *,
