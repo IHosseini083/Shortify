@@ -18,7 +18,9 @@ class User(Document):
 
     @classmethod
     async def get_by_username(cls, *, username: str) -> Optional["User"]:
-        return await cls.find_one(cls.username == username)
+        # Because all usernames are converted to lowercase at user creation,
+        # make the given 'username' parameter also lowercase.
+        return await cls.find_one(cls.username == username.lower())
 
     @classmethod
     async def authenticate(
@@ -27,7 +29,7 @@ class User(Document):
         username: str,
         password: str,
     ) -> Optional["User"]:
-        user = await cls.find_one(cls.username == username)
+        user = await cls.get_by_username(username=username)
         if not user or not verify_password(password, user.hashed_password):
             return None
         return user

@@ -12,7 +12,7 @@ async def init() -> None:
         database=client.shortify,
         document_models=gather_documents(),  # type: ignore[arg-type]
     )
-    if not await User.find_one(User.username == settings.FIRST_SUPERUSER):
+    if not await User.get_by_username(username=settings.FIRST_SUPERUSER):
         await User(
             username=settings.FIRST_SUPERUSER,
             email=settings.FIRST_SUPERUSER_EMAIL,
