@@ -22,6 +22,7 @@ class ShortUrl(BaseModel):
     views: int
     created_at: datetime
     expires_at: Optional[datetime] = None
+    last_visit_at: Optional[datetime] = None
     slug: Optional[str] = None
 
     class Config:
