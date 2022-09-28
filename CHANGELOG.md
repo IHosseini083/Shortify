@@ -6,6 +6,23 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.0] (2022-09-29)
+
+### Added
+
+- Add utility to create class-based api views.
+- Add `last_visit_at` field to `ShortUrl` schema.
+
+### Changed
+
+- Convert all api views except for the `/auth/` endpoints to class-based views.
+- Update `get_by_username()` method of `User` model to comply with the constraints of the
+  `username` field on user creation (handled by the `ConstrainedUsername` field type).
+
+### Removed
+
+- Remove redundant `get_by_origin()` method of `ShortUrl` model.
+
 ## [0.0.9] (2022-09-27)
 
 ### Added
@@ -118,4 +135,5 @@ MongoDB connection string.
 [0.0.7]: https://github.com/IHosseini083/Shortify/compare/v0.0.6...v0.0.7
 [0.0.8]: https://github.com/IHosseini083/Shortify/compare/v0.0.7...v0.0.8
 [0.0.9]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.9
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...HEAD
+[0.1.0]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...v0.1.0
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...HEAD
