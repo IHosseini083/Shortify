@@ -4,9 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
-from shortify.app import models, schemas
+from shortify.app import schemas
+from shortify.app.api.v1.deps import get_current_active_user
 from shortify.app.core import security
 from shortify.app.core.config import settings
+from shortify.app.core.security import create_api_key
+from shortify.app.models import User
+from shortify.app.utils import cbv
 
 router = APIRouter(
     responses={
@@ -26,7 +30,7 @@ async def generate_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> ORJSONResponse:
     """Get an access token for future requests."""
-    user = await models.User.authenticate(
+    user = await User.authenticate(
         username=form_data.username,
         password=form_data.password,
     )
@@ -50,3 +54,19 @@ async def generate_access_token(
             "token_type": "bearer",
         },
     )
+
+
+@cbv(router)
+class BasicUserViews:
+    user: User = Depends(get_current_active_user)
+
+    @router.post(
+        "/api-key",
+        response_model=schemas.User,
+        status_code=status.HTTP_201_CREATED,
+    )
+    async def generate_new_api_key(self) -> User:
+        """Create a new API key for current user."""
+        self.user.api_key = create_api_key()
+        await self.user.save_changes()
+        return self.user

@@ -5,7 +5,7 @@ from beanie import Document, Indexed
 from pydantic import EmailStr
 from pydantic.fields import Field
 
-from shortify.app.core.security import verify_password
+from shortify.app.core.security import create_api_key, verify_password
 
 
 class User(Document):
@@ -15,12 +15,17 @@ class User(Document):
     is_active: bool = True
     is_superuser: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    api_key: str = Field(default_factory=create_api_key)
 
     @classmethod
     async def get_by_username(cls, *, username: str) -> Optional["User"]:
         # Because all usernames are converted to lowercase at user creation,
         # make the given 'username' parameter also lowercase.
         return await cls.find_one(cls.username == username.lower())
+
+    @classmethod
+    async def get_by_api_key(cls, *, api_key: str) -> Optional["User"]:
+        return await cls.find_one(cls.api_key == api_key.lower())
 
     @classmethod
     async def authenticate(

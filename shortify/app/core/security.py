@@ -1,4 +1,6 @@
+import secrets
 from datetime import datetime, timedelta
+from hashlib import md5
 from typing import Any, Optional, Union
 
 from jose import jwt
@@ -38,3 +40,8 @@ def create_access_token(
         "sub": str(subject),
     }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
+
+
+def create_api_key() -> str:
+    """Create a random API key."""
+    return md5(secrets.token_bytes(32)).hexdigest()

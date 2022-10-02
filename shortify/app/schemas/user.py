@@ -35,6 +35,7 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     created_at: datetime
+    api_key: str = None
 
     class Config:
         orm_mode = True
