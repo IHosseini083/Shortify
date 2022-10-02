@@ -6,6 +6,12 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.1] (2022-10-02)
+
+### Added
+
+- Add user authentication via API key.
+
 ## [0.1.0] (2022-09-29)
 
 ### Added
@@ -136,4 +142,5 @@ MongoDB connection string.
 [0.0.8]: https://github.com/IHosseini083/Shortify/compare/v0.0.7...v0.0.8
 [0.0.9]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.9
 [0.1.0]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...v0.1.0
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...HEAD
+[0.1.1]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...v0.1.1
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...HEAD
