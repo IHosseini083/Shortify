@@ -19,6 +19,23 @@ bearer_token = OAuth2PasswordBearer(
 api_key_query = APIKeyQuery(name="api_key", auto_error=False)
 
 
+async def authenticate_bearer_token(token: str) -> Optional[User]:
+    try:
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[security.ALGORITHM],
+        )
+        data = schemas.AuthTokenPayload(**payload)
+    except (jwt.JWTError, ValidationError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+    else:
+        return await User.get(cast(PydanticObjectId, data.sub))
+
+
 async def get_current_user(
     api_key: Optional[str] = Depends(api_key_query),
     token: Optional[str] = Depends(bearer_token),
@@ -27,19 +44,7 @@ async def get_current_user(
     if api_key:  # API Key has priority over Bearer token
         user = await User.get_by_api_key(api_key=api_key)
     elif token:
-        try:
-            payload = jwt.decode(
-                token,
-                settings.SECRET_KEY,
-                algorithms=[security.ALGORITHM],
-            )
-            data = schemas.AuthTokenPayload(**payload)
-        except (jwt.JWTError, ValidationError):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Could not validate credentials",
-            )
-        user = await User.get(cast(PydanticObjectId, data.sub))
+        user = await authenticate_bearer_token(token)
     else:
         # This is the exception that is raised by the Depends() call
         # when the user is not authenticated and auto_error is True.
@@ -48,6 +53,11 @@ async def get_current_user(
             detail="Not authenticated",
         )
     if not user:
+        if api_key:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Invalid API key",
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
