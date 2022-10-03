@@ -44,8 +44,8 @@ def _init_cbv(cls: Type[Any]) -> None:
                 name=name,
                 kind=inspect.Parameter.KEYWORD_ONLY,
                 annotation=hint,
-                **parameter_kwargs
-            )
+                **parameter_kwargs,
+            ),
         )
     new_signature = signature.replace(parameters=new_parameters)
 
@@ -61,7 +61,7 @@ def _init_cbv(cls: Type[Any]) -> None:
 
 
 def _update_cbv_route_endpoint_signature(
-    cls: Type[Any], route: Union[Route, WebSocketRoute]
+    cls: Type[Any], route: Union[Route, WebSocketRoute],
 ) -> None:
     """
     Fixes the endpoint signature for a class-based view route to ensure that
