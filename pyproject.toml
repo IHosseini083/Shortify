@@ -18,7 +18,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 black = "^22.6.0"
 pre-commit = "^2.20.0"
 isort = "^5.10.1"
-mypy = "^0.971"
+mypy = "^0.981"
 flake8 = "^5.0.4"
 autoflake = "^1.5.1"
 
