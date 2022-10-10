@@ -25,7 +25,6 @@ venv/
 *.sqlite3
 
 # Poetry files
-poetry.lock
 poetry.toml
 
 # Docs and Builds
