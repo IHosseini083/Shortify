@@ -14,7 +14,7 @@ beanie = "^1.11.11"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
 pre-commit = "^2.20.0"
 isort = "^5.10.1"
