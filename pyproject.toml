@@ -15,7 +15,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.6.0"
+black = "^22.10.0"
 pre-commit = "^2.20.0"
 isort = "^5.10.1"
 mypy = "^0.971"
