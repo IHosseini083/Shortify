@@ -6,6 +6,22 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.2] (2022-10-11)
+
+### Added
+
+- Add community code of conduct.
+
+### Changed
+
+- Bump black from 22.6.0 to 22.10.0.
+- Bump beanie from 1.11.11 to 1.12.0.
+- Use new poetry dependency grouping syntax for dev dependencies in pyproject.toml.
+
+### Fixed
+
+- Now a `HTTPException` with status code `403` is raised when the given `api_key` query parameter is invalid.
+
 ## [0.1.1] (2022-10-02)
 
 ### Added
@@ -143,4 +159,5 @@ MongoDB connection string.
 [0.0.9]: https://github.com/IHosseini083/Shortify/compare/v0.0.8...v0.0.9
 [0.1.0]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...v0.1.0
 [0.1.1]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...v0.1.1
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...HEAD
+[0.1.2]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...v0.1.2
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...HEAD
