@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import TYPE_CHECKING
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -8,7 +8,10 @@ from shortify.app.api.v1.deps import (
     get_current_active_user,
 )
 from shortify.app.models import ShortUrl, User
-from shortify.app.utils import cbv
+from shortify.app.utils import cbv, paginate
+
+if TYPE_CHECKING:
+    from shortify.app.utils.types import PaginationDict
 
 router = APIRouter()
 
@@ -49,22 +52,8 @@ class SuperuserViews:
         self,
         paging: schemas.PaginationParams = Depends(),
         sorting: schemas.SortingParams = Depends(),
-    ) -> Dict[str, Any]:
-        results = (
-            await ShortUrl.find()
-            .skip(paging.skip)
-            .limit(paging.limit)
-            .sort(
-                (sorting.sort, sorting.order.direction),
-            )
-            .to_list()
-        )
-        return {
-            "page": paging.page,
-            "per_page": paging.per_page,
-            "total": await ShortUrl.count(),
-            "results": results,
-        }
+    ) -> "PaginationDict":
+        return await paginate(ShortUrl, paging, sorting)
 
     @router.get("/{ident}", response_model=schemas.ShortUrl)
     async def get_short_url(self, ident: str) -> ShortUrl:

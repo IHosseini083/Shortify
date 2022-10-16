@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from pydantic.networks import EmailStr
@@ -10,7 +10,10 @@ from shortify.app.api.v1.deps import (
 )
 from shortify.app.core.security import get_password_hash
 from shortify.app.models import ShortUrl, User
-from shortify.app.utils import cbv
+from shortify.app.utils import cbv, paginate
+
+if TYPE_CHECKING:
+    from shortify.app.utils.types import PaginationDict
 
 router = APIRouter()
 
@@ -74,22 +77,8 @@ class SuperuserViews:
         self,
         paging: schemas.PaginationParams = Depends(),
         sorting: schemas.SortingParams = Depends(),
-    ) -> Dict[str, Any]:
-        results = (
-            await User.find()
-            .skip(paging.skip)
-            .limit(paging.limit)
-            .sort(
-                (sorting.sort, sorting.order.direction),
-            )
-            .to_list()
-        )
-        return {
-            "page": paging.page,
-            "per_page": paging.per_page,
-            "total": await User.count(),
-            "results": results,
-        }
+    ) -> "PaginationDict":
+        return await paginate(User, paging, sorting)
 
     @router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
     async def create_user(self, user_in: schemas.UserCreate) -> User:
