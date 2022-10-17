@@ -6,6 +6,19 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.3] (2022-10-17)
+
+### Added
+
+- Include `poetry.lock` file in repository.
+- Add EditorConfig configurations.
+- Create pagination utility function.
+- Add VSCode settings for linting, formatting and debugging Python code.
+
+### Removed
+
+- Remove default value of None for `api_key` field in `UserInDBBase` schema.
+
 ## [0.1.2] (2022-10-11)
 
 ### Added
@@ -160,4 +173,5 @@ MongoDB connection string.
 [0.1.0]: https://github.com/IHosseini083/Shortify/compare/v0.0.9...v0.1.0
 [0.1.1]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...v0.1.1
 [0.1.2]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...v0.1.2
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...HEAD
+[0.1.3]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...v0.1.3
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...HEAD
