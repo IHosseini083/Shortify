@@ -7,7 +7,7 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, MongoDsn, validator
 class Settings(BaseSettings):
     # Application
     PROJECT_NAME: str = "Shortify"
-    PROJECT_VERSION: str = "0.1.2"
+    PROJECT_VERSION: str = "0.1.3"
     API_V1_STR: str = "v1"
     DEBUG: bool = True
     BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
