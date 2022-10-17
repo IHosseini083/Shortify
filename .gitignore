@@ -17,9 +17,6 @@ venv/
 # Pycharm project settings
 .idea/
 
-# VSCode project settings
-.vscode/
-
 # database
 *.db
 *.sqlite3

@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "internalConsole"
+    },
+    {
+      "name": "Python: FastAPI",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["shortify.app.main:app", "--reload"],
+      "jinja": true,
+      "justMyCode": false
+    }
+  ]
+}
