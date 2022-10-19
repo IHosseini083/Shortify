@@ -6,6 +6,18 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.4] (2022-10-20)
+
+### Added
+
+- Add base structured logging system via `structlog`.
+- Add custom `RequestValidationError` exception handler.
+
+### Changed
+
+- Increase `editor.rulers` in VSCode settings to 88.
+- Bump fastapi from 0.85.0 to 0.85.1.
+
 ## [0.1.3] (2022-10-17)
 
 ### Added
@@ -174,4 +186,5 @@ MongoDB connection string.
 [0.1.1]: https://github.com/IHosseini083/Shortify/compare/v0.1.0...v0.1.1
 [0.1.2]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...v0.1.2
 [0.1.3]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...v0.1.3
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...HEAD
+[0.1.4]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...v0.1.4
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.4...HEAD
