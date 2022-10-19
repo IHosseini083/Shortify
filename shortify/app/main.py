@@ -6,6 +6,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from shortify.app import api
 from shortify.app.core.config import settings
+from shortify.app.core.logging import setup_logging
 from shortify.app.db import init_db
 
 tags_metadata = [
@@ -61,6 +62,7 @@ if settings.BACKEND_CORS_ORIGINS:
 @app.on_event("startup")
 async def on_startup() -> None:
     """Initialize services on startup."""
+    setup_logging()
     await init_db.init()
 
 

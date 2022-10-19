@@ -1,3 +1,4 @@
+import logging
 import secrets
 from typing import List, Union
 
@@ -11,6 +12,14 @@ class Settings(BaseSettings):
     API_V1_STR: str = "v1"
     DEBUG: bool = True
     BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
+    LOG_LEVEL: str = "INFO"
+
+    @validator("LOG_LEVEL")
+    def log_level_validator(cls, v: str) -> str:  # noqa
+        v = v.upper()
+        if not hasattr(logging, v):
+            raise ValueError(f"Invalid log level: {v!r}")
+        return v
 
     # Custom validators that have 'pre' set to 'True', will be called before
     # all standard pydantic validators.
