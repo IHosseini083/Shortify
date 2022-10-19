@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,6 +9,7 @@ from shortify.app import api
 from shortify.app.core.config import settings
 from shortify.app.core.logging import setup_logging
 from shortify.app.db import init_db
+from shortify.app.schemas.validation_error import APIValidationError
 
 tags_metadata = [
     {
@@ -38,6 +40,12 @@ app = FastAPI(
     license_info={
         "name": "GNU General Public License v3.0",
         "url": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+    },
+    responses={
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
+            "description": "Unprocessable Entity (Validation Error)",
+            "model": APIValidationError,  # This will add OpenAPI schema to the docs
+        }
     },
 )
 
@@ -75,4 +83,14 @@ async def http_exception_handler(_, exc: StarletteHTTPException) -> ORJSONRespon
         },
         status_code=exc.status_code,
         headers=exc.headers,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def custom_validation_exception_handler(
+    _, exc: RequestValidationError
+) -> ORJSONResponse:
+    return ORJSONResponse(
+        content=APIValidationError.from_pydantic(exc).dict(exclude_none=True),
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
     )
