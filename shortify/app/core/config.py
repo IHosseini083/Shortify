@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "v1"
     DEBUG: bool = True
     BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
+    USE_CORRELATION_ID: bool = True
 
     # Logging
     LOG_LEVEL: str = "INFO"

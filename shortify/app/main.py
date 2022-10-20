@@ -1,6 +1,5 @@
 from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -58,6 +57,8 @@ app.include_router(api.redirect.router)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
+    from fastapi.middleware.cors import CORSMiddleware
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
@@ -65,6 +66,11 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+if settings.USE_CORRELATION_ID:
+    from shortify.app.middlewares.correlation import CorrelationMiddleware
+
+    app.add_middleware(CorrelationMiddleware)
 
 
 @app.on_event("startup")
