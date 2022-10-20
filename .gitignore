@@ -28,3 +28,6 @@ poetry.toml
 dist/
 site/
 build/
+
+# Application logs
+*.log
