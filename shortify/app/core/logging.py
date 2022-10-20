@@ -6,10 +6,17 @@ import structlog
 import uvicorn
 
 from shortify.app.core.config import settings
+from shortify.app.middlewares.correlation import correlation_id
 
 LOG_LEVEL = "DEBUG" if settings.DEBUG else settings.LOG_LEVEL
 
 EventDict = structlog.types.EventDict
+
+
+def add_correlation_id(_, __, event_dict: EventDict) -> EventDict:
+    if cid := correlation_id.get():
+        event_dict["correlation_id"] = cid
+    return event_dict
 
 
 def remove_color_message(_, __, event_dict: EventDict) -> EventDict:
@@ -37,7 +44,7 @@ LOGGING_CONFIG: Dict[str, Any] = {
             "()": structlog.stdlib.ProcessorFormatter,
             # Render the final event dict as JSON.
             "processor": structlog.processors.JSONRenderer(),
-            "foreign_pre_chain": SHARED_PROCESSORS,
+            "foreign_pre_chain": SHARED_PROCESSORS + (add_correlation_id,),
         },
         "colored": {
             "()": structlog.stdlib.ProcessorFormatter,
