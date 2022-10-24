@@ -27,7 +27,7 @@ class APIValidationError(BaseModel):
                     context=err.get("ctx"),
                 )
                 for err in exc.errors()
-            ]
+            ],
         )
 
     class Config:
@@ -38,7 +38,7 @@ class APIValidationError(BaseModel):
                         "origin": "body -> url",
                         "message": "invalid or missing URL scheme",
                         "error_type": "value_error.url.scheme",
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }

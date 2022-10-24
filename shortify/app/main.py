@@ -44,7 +44,7 @@ app = FastAPI(
         status.HTTP_422_UNPROCESSABLE_ENTITY: {
             "description": "Unprocessable Entity (Validation Error)",
             "model": APIValidationError,  # This will add OpenAPI schema to the docs
-        }
+        },
     },
 )
 
@@ -94,7 +94,8 @@ async def http_exception_handler(_, exc: StarletteHTTPException) -> ORJSONRespon
 
 @app.exception_handler(RequestValidationError)
 async def custom_validation_exception_handler(
-    _, exc: RequestValidationError
+    _,
+    exc: RequestValidationError,
 ) -> ORJSONResponse:
     return ORJSONResponse(
         content=APIValidationError.from_pydantic(exc).dict(exclude_none=True),
