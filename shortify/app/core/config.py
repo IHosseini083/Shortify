@@ -47,7 +47,7 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     # Database
-    MONGODB_URI: MongoDsn
+    MONGODB_URI: MongoDsn = "mongodb://localhost:27017/"  # type: ignore[assignment]
 
     # Superuser
     FIRST_SUPERUSER: str
