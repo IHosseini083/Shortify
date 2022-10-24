@@ -6,6 +6,22 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.5] (2022-10-24)
+
+### Added
+
+- Add correlation middleware.
+- Add application logs to .gitignore.
+- Add `add_correlation_id` logging processor.
+- Add new field `MONGODB_DB_NAME` in app settings for database name.
+- Add sample .env file.
+
+### Changed
+
+- Refactor logging functionality.
+- Set default value for `MONGODB_URI` field in app settings.
+- Complete all README file sections.
+
 ## [0.1.4] (2022-10-20)
 
 ### Added
@@ -187,4 +203,5 @@ MongoDB connection string.
 [0.1.2]: https://github.com/IHosseini083/Shortify/compare/v0.1.1...v0.1.2
 [0.1.3]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...v0.1.3
 [0.1.4]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...v0.1.4
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.4...HEAD
+[0.1.5]: https://github.com/IHosseini083/Shortify/compare/v0.1.4...v0.1.5
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.5...HEAD
