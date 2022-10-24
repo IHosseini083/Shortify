@@ -95,13 +95,14 @@ running the application. Rest of them are optional and have default values.
 
 #### FastAPI Application
 
-| Name                   | Description                 |               Default               |        Type        |
-|------------------------|:----------------------------|:-----------------------------------:|:------------------:|
-| `PROJECT_NAME`         | Project name.               |             `Shortify`              |      `string`      |
-| `PROJECT_VERSION`      | Project version.            |   Current version of the project.   |      `string`      |
-| `API_V1_STR`           | API version 1 prefix.       |              `/api/v1`              |      `string`      |
-| `DEBUG`                | Debug mode for development. |               `False`               |     `boolean`      |
-| `BACKEND_CORS_ORIGINS` | Allowed origins for CORS.   | An empty list to allow all origins. | `list` of `string` |
+| Name                   | Description                                |               Default               |        Type        |
+|------------------------|:-------------------------------------------|:-----------------------------------:|:------------------:|
+| `PROJECT_NAME`         | Project name.                              |             `Shortify`              |      `string`      |
+| `PROJECT_VERSION`      | Project version.                           |   Current version of the project.   |      `string`      |
+| `API_V1_STR`           | API version 1 prefix.                      |                `v1`                 |      `string`      |
+| `DEBUG`                | Debug mode for development.                |               `True`                |     `boolean`      |
+| `BACKEND_CORS_ORIGINS` | Allowed origins for CORS.                  | An empty list to allow all origins. | `list` of `string` |
+| `USE_CORRELATION_ID`   | Use correlation ID middleware for logging. |               `True`                |     `boolean`      |
 
 #### Logging
 
