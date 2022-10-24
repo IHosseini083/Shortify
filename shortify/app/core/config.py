@@ -48,6 +48,7 @@ class Settings(BaseSettings):
 
     # Database
     MONGODB_URI: MongoDsn = "mongodb://localhost:27017/"  # type: ignore[assignment]
+    MONGODB_DB_NAME: str = "shortify"
 
     # Superuser
     FIRST_SUPERUSER: str

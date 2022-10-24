@@ -9,7 +9,7 @@ from shortify.app.models import User, gather_documents
 async def init() -> None:
     client = AsyncIOMotorClient(str(settings.MONGODB_URI))
     await init_beanie(
-        database=client.shortify,
+        database=getattr(client, settings.MONGODB_DB_NAME),
         document_models=gather_documents(),  # type: ignore[arg-type]
     )
     if not await User.get_by_username(username=settings.FIRST_SUPERUSER):
