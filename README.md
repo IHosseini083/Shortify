@@ -190,9 +190,9 @@ After running the application, you can access the OpenAPI (Swagger) documentatio
 ## Project Structure, Modifications and Best Practices
 
 Structure of `shortify` folder containing main files and folders of the application is consistent and straightforward
-and just by looking at module names
+and just by looking at module names it gives you an idea of what's inside it!
 
-```console
+```
 ./shortify
 │    .env.sample        # Sample .env file for setting environment variables
 │    __init__.py
