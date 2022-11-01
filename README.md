@@ -11,6 +11,8 @@
 </a>
 </div>
 
+## Table of Contents
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Requirements](#requirements)
@@ -28,6 +30,9 @@
     - [In development mode](#in-development-mode)
     - [In production mode](#in-production-mode)
 - [Documentation and Usage](#documentation-and-usage)
+- [Project Structure, Modifications and Best Practices](#project-structure-modifications-and-best-practices)
+  - [Creating new API routes](#creating-new-api-routes)
+  - [FastAPI Best Practices](#fastapi-best-practices)
 - [License](#license)
 
 ## Introduction
@@ -69,7 +74,8 @@ git clone https://github.com/IHosseini083/Shortify.git
 
 ### 2. Install dependencies
 
-You need to configure [Poetry] to place the virtual environment in the project directory. To do so, run the following command:
+You need to configure [Poetry] to place the virtual environment in the project directory. To do so, run the following
+command:
 
 ```bash
 poetry config --local virtualenvs.in-project true
@@ -153,7 +159,8 @@ Also note that **ALL** environment variables are **CASE SENSITIVE**.
 
 #### In development mode
 
-If you want to run the application in development mode, you can simply run the following command in the project directory,
+If you want to run the application in development mode, you can simply run the following command in the project
+directory,
 and it will start the application with [uvicorn] server on `localhost:8000`:
 
 ```bash
@@ -166,7 +173,8 @@ automatically on code changes. If you're using [VSCode], you can use the debugge
 
 #### In production mode
 
-But if you're going to run the application in production (e.g. On a VPS), you can use a production-ready server like [gunicorn]
+But if you're going to run the application in production (e.g. On a VPS), you can use a production-ready server
+like [gunicorn]
 along-side [uvicorn]. You can do that by running the following command in the project directory:
 
 ```bash
@@ -178,6 +186,106 @@ That will start the application on `SERVER_IP:8000`.
 ## Documentation and Usage
 
 After running the application, you can access the OpenAPI (Swagger) documentation at `/v1/docs` endpoint.
+
+## Project Structure, Modifications and Best Practices
+
+Structure of `shortify` folder containing main files and folders of the application is consistent and straightforward
+and just by looking at module names
+
+```console
+./shortify
+│    .env.sample        # Sample .env file for setting environment variables
+│    __init__.py
+│    __main__.py        # Runs the development server
+├─── app                # Primary app folder
+│   │    main.py        # Contains FastAPI application and its settings
+│   │    __init__.py    # Contains project version variable
+│   ├─── api            # All API views/routes are here
+│   ├─── core           # Core configs and utils for the application
+│   ├─── db             # Database initialization and session (if needded)
+│   ├─── middlewares    # ASGI middlewares for FastAPI application
+│   ├─── models         # Database models
+│   ├─── schemas        # Pydantic schemas
+│   ├─── static         # Static files served at /static endpoint
+│   ├─── utils          # Utilites used by the API
+```
+
+### Creating new API routes
+
+To create new API routes and add them to your main application, you need to create new `fastapi.APIRouter` instances or
+use the existing ones depending on the endpoint you need to implement. All API routers for API version one (v1) are
+located at `shortify/app/api/v1/endpoints` folder and then grouped together in `shortify/app/api/v1/__init__.py` file by
+including
+them in a separate `fastapi.APIRouter` instance that will be added to main app:
+
+```python
+# shortify/app/api/v1/__init__.py
+from fastapi import APIRouter
+
+from shortify.app.api.v1.endpoints import auth, urls, users
+from shortify.app.core.config import settings
+
+router = APIRouter(prefix=f"/{settings.API_V1_STR}")
+router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+router.include_router(users.router, prefix="/users", tags=["Users"])
+router.include_router(urls.router, prefix="/urls", tags=["URLs"])
+```
+
+Now let's say you want to add a new router for statistics about short URLs and then add it to your main app, this is how
+you're going to do it:
+
+1. Create new module named `stats.py` in `shortify/app/api/v1/endpoints` package.
+2. Create an `fastapi.APIRouter` instance in `stats.py` module.
+
+```python
+# shortify/app/api/v1/endpoints/stats.py
+from fastapi import APIRouter
+
+router = APIRouter()
+```
+
+3. E.g. Create an API route to get most visited short URLs in descending order
+
+```python
+# shortify/app/api/v1/endpoints/stats.py
+from fastapi import APIRouter
+from typing import List
+from shortify.app.models import ShortUrl
+
+router = APIRouter()
+
+
+@router.get("/most-visited")
+async def get_most_visited_urls(skip: int = 0, limit: int = 10) -> List[ShortUrl]:
+    # Sort URLs in descending order based on their views
+    return await ShortUrl.find(skip=skip, limit=limit).sort(-ShortUrl.views).to_list()
+```
+
+You could also implement the route using class-based views decorator but since we don't have any dependencies or code
+duplications, this approach was simply enough for our use-case.
+
+4. Finally, add the newly created router to the main router for version one
+
+```python
+# shortify/app/api/v1/__init__.py
+from fastapi import APIRouter
+
+from shortify.app.api.v1.endpoints import stats
+from shortify.app.core.config import settings
+
+router = APIRouter(prefix=f"/{settings.API_V1_STR}")
+# Other routers omitted for brevity
+router.include_router(stats.router, prefix="/stats", tags=["Statistics"])
+```
+
+5. That's it! now you can see the created endpoint in your API docs.
+
+### FastAPI Best Practices
+
+You want to extend the application with the best practices available? check out the below repositories:
+
+- [fastapi-best-practices]
+- [full-stack-fastapi-postgresql] (by FastAPI creator, Sebastián Ramírez)
 
 ## License
 
@@ -197,3 +305,5 @@ This project is licensed under the terms of the [GPL-3.0] license.
 [uvicorn]: https://www.uvicorn.org/ "The lightning-fast ASGI server."
 [gunicorn]: https://gunicorn.org/ "A Python WSGI HTTP Server for UNIX."
 [VSCode]: https://code.visualstudio.com/ "Redefined and optimized code editor for building and debugging modern web and cloud applications."
+[fastapi-best-practices]: https://github.com/zhanymkanov/fastapi-best-practices "Opinionated list of best practices and conventions."
+[full-stack-fastapi-postgresql]: https://github.com/tiangolo/full-stack-fastapi-postgresql "Full stack, modern web application generator. Using FastAPI, PostgreSQL as database, Docker, automatic HTTPS and more."
