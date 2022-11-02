@@ -13,6 +13,7 @@
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Features](#features)
 - [Requirements](#requirements)
@@ -185,7 +186,7 @@ That will start the application on `SERVER_IP:8000`.
 
 ## Documentation and Usage
 
-After running the application, you can access the OpenAPI (Swagger) documentation at `/v1/docs` endpoint.
+After running the application, you can access the OpenAPI (Swagger) documentation at `/api/v1/docs` endpoint.
 
 ## Project Structure, Modifications and Best Practices
 
