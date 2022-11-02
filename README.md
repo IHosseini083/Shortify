@@ -34,6 +34,15 @@
 - [Project Structure, Modifications and Best Practices](#project-structure-modifications-and-best-practices)
   - [Creating new API routes](#creating-new-api-routes)
   - [FastAPI Best Practices](#fastapi-best-practices)
+- [Stack](#stack)
+  - [Web API](#web-api)
+  - [Logging](#logging-1)
+  - [Database](#database)
+  - [Dependency Management](#dependency-management)
+  - [Git Hooks](#git-hooks)
+  - [Linting](#linting)
+  - [Formatting](#formatting)
+  - [Type Checking](#type-checking)
 - [License](#license)
 
 ## Introduction
@@ -288,6 +297,47 @@ You want to extend the application with the best practices available? check out 
 - [fastapi-best-practices]
 - [full-stack-fastapi-postgresql] (by FastAPI creator, Sebastián Ramírez)
 
+## Stack
+
+Frameworks and technologies used in _Shortify_
+
+### Web API
+
+- [FastAPI] (All dependencies)
+- [Pydantic]
+- [Uvicorn]
+
+### Logging
+
+- [structlog]
+
+### Database
+
+- [MongoDB]
+- [beanie] (ODM)
+
+### Dependency Management
+
+- [poetry]
+
+### Git Hooks
+
+- [pre-commit]
+
+### Linting
+
+- [flake8]
+- [autoflake]
+
+### Formatting
+
+- [black]
+- [isort]
+
+### Type Checking
+
+- [mypy]
+
 ## License
 
 This project is licensed under the terms of the [GPL-3.0] license.
@@ -308,3 +358,9 @@ This project is licensed under the terms of the [GPL-3.0] license.
 [VSCode]: https://code.visualstudio.com/ "Redefined and optimized code editor for building and debugging modern web and cloud applications."
 [fastapi-best-practices]: https://github.com/zhanymkanov/fastapi-best-practices "Opinionated list of best practices and conventions."
 [full-stack-fastapi-postgresql]: https://github.com/tiangolo/full-stack-fastapi-postgresql "Full stack, modern web application generator. Using FastAPI, PostgreSQL as database, Docker, automatic HTTPS and more."
+[pydantic]: https://github.com/pydantic/pydantic "Data parsing and validation using Python type hints."
+[beanie]: <https://github.com/roman-right/beanie> "Python ODM for MongoDB."
+[flake8]: https://github.com/PyCQA/flake8
+[autoflake]: https://github.com/PyCQA/autoflake
+[isort]: <https://github.com/PyCQA/isort> "A Python utility / library to sort imports."
+[mypy]: https://github.com/python/mypy "Optional static typing for Python."
