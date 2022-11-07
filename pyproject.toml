@@ -9,7 +9,7 @@ repository = "https://github.com/IHosseini/Shortify"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = {extras = ["all"], version = "^0.85.1"}
+fastapi = {extras = ["all"], version = "^0.86.0"}
 beanie = "^1.13.1"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
