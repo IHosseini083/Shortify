@@ -6,6 +6,23 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
+## [0.1.6]
+
+### Added
+
+- Add support for MongoDB DNS Seed List connection schema (`mongodb+srv`).
+- Add new section `Project Structure, Modifications and Best Practices` to README.
+
+### Changed
+
+- Reformat TODO file.
+- pre-commit autoupdate, #16.
+- Bump beanie from 1.13.0 to 1.13.1, #15.
+- Bump fastapi from 0.85.2 to 0.86.0, #18.
+- Correct path to docs in `Documentation and Usage` section.
+- Update dependencies.
+- Add `Stack` section to README.
+
 ## [0.1.5] (2022-10-24)
 
 ### Added
@@ -204,4 +221,5 @@ MongoDB connection string.
 [0.1.3]: https://github.com/IHosseini083/Shortify/compare/v0.1.2...v0.1.3
 [0.1.4]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...v0.1.4
 [0.1.5]: https://github.com/IHosseini083/Shortify/compare/v0.1.4...v0.1.5
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.5...HEAD
+[0.1.6]: https://github.com/IHosseini083/Shortify/compare/v0.1.5...v0.1.6
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.6...HEAD
