@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "shortify"
-version = "0.1.5"
+version = "0.1.6"
 description = "Shortify is a URL shortener RESTful API built with Python and FastAPI."
 authors = ["Iliya <IHosseini083@gmail.com>"]
 license = "GPL-3.0-only"
