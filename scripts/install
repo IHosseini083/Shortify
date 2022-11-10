@@ -1,7 +1,6 @@
 #!/bin/sh -e
 
 POETRY_PATH="${HOME}/.local/share/pypoetry"
-POETRY_LOCKFILE="poetry.lock"
 VENV=".venv"
 
 if [ ! -d "$POETRY_PATH" ] ; then
@@ -16,6 +15,4 @@ if [ ! -d "$VENV" ] ; then
     poetry env use python3
 fi
 
-if [ ! -f "$POETRY_LOCKFILE" ] ; then
-    poetry install -vvv
-fi
+poetry install -vv
