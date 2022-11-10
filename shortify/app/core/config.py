@@ -7,6 +7,9 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, MongoDsn, validator
 
 from shortify import __version__
 
+# This adds support for 'mongodb+srv' connection schemas when using e.g. MongoDB Atlas
+MongoDsn.allowed_schemes.add("mongodb+srv")
+
 
 class Settings(BaseSettings):
     # Application
