@@ -1,6 +1,5 @@
 import sys
-from collections.abc import Sequence
-from typing import Type, TypeVar
+from typing import Sequence, Type, TypeVar
 
 from beanie import Document
 
