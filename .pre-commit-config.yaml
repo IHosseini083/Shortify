@@ -41,5 +41,8 @@ repos:
     rev: 1.2.2
     hooks:
       - id: poetry-check
-      - id: poetry-lock
-        args: ["--no-update"]
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.114
+    hooks:
+    -   id: ruff
+        args: ["--fix"]

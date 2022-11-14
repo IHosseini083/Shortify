@@ -16,18 +16,6 @@ test = ["contextlib2", "coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "mock (>=
 trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
-name = "autoflake"
-version = "1.7.7"
-description = "Removes unused imports and unused variables"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-pyflakes = ">=1.1.0"
-tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
-
-[[package]]
 name = "bcrypt"
 version = "4.0.1"
 description = "Modern password hashing for your software and your servers"
@@ -243,19 +231,6 @@ docs = ["furo (>=2022.6.21)", "sphinx (>=5.1.1)", "sphinx-autodoc-typehints (>=1
 testing = ["covdefaults (>=2.2)", "coverage (>=6.4.2)", "pytest (>=7.1.2)", "pytest-cov (>=3)", "pytest-timeout (>=2.1)"]
 
 [[package]]
-name = "flake8"
-version = "5.0.4"
-description = "the modular source code checker: pep8 pyflakes and co"
-category = "dev"
-optional = false
-python-versions = ">=3.6.1"
-
-[package.dependencies]
-mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.9.0,<2.10.0"
-pyflakes = ">=2.5.0,<2.6.0"
-
-[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -336,14 +311,6 @@ description = "Safely add untrusted strings to HTML/XML markup."
 category = "main"
 optional = false
 python-versions = ">=3.7"
-
-[[package]]
-name = "mccabe"
-version = "0.7.0"
-description = "McCabe checker, plugin for flake8"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
 
 [[package]]
 name = "motor"
@@ -480,14 +447,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "pycodestyle"
-version = "2.9.1"
-description = "Python style guide checker"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -509,14 +468,6 @@ typing-extensions = ">=4.1.0"
 [package.extras]
 dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
-
-[[package]]
-name = "pyflakes"
-version = "2.5.0"
-description = "passive checker of Python programs"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
 
 [[package]]
 name = "pymongo"
@@ -614,6 +565,14 @@ python-versions = ">=3.6,<4"
 
 [package.dependencies]
 pyasn1 = ">=0.1.3"
+
+[[package]]
+name = "ruff"
+version = "0.0.117"
+description = "An extremely fast Python linter, written in Rust."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "setuptools"
@@ -803,16 +762,12 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b80b78e45bcc7060f86ae0aa7d350ce14f4aae774d8361e6b06f2a0f83b86694"
+content-hash = "0e5dea1750741da2bfb11f4211210dcb9e764ba7307b8af32f08a44d90d9c912"
 
 [metadata.files]
 anyio = [
     {file = "anyio-3.6.2-py3-none-any.whl", hash = "sha256:fbbe32bd270d2a2ef3ed1c5d45041250284e31fc0a4df4a5a6071842051a51e3"},
     {file = "anyio-3.6.2.tar.gz", hash = "sha256:25ea0d673ae30af41a0c442f81cf3b38c7e79fdc7b60335a4c14e05eb0947421"},
-]
-autoflake = [
-    {file = "autoflake-1.7.7-py3-none-any.whl", hash = "sha256:a9b43d08f8e455824e4f7b3f078399f59ba538ba53872f466c09e55c827773ef"},
-    {file = "autoflake-1.7.7.tar.gz", hash = "sha256:c8e4fc41aa3eae0f5c94b939e3a3d50923d7a9306786a6cbf4866a077b8f6832"},
 ]
 bcrypt = [
     {file = "bcrypt-4.0.1-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:b1023030aec778185a6c16cf70f359cbb6e0c289fd564a7cfa29e727a1c38f8f"},
@@ -1002,10 +957,6 @@ filelock = [
     {file = "filelock-3.8.0-py3-none-any.whl", hash = "sha256:617eb4e5eedc82fc5f47b6d61e4d11cb837c56cb4544e39081099fa17ad109d4"},
     {file = "filelock-3.8.0.tar.gz", hash = "sha256:55447caa666f2198c5b6b13a26d2084d26fa5b115c00d065664b2124680c4edc"},
 ]
-flake8 = [
-    {file = "flake8-5.0.4-py2.py3-none-any.whl", hash = "sha256:7a1cf6b73744f5806ab95e526f6f0d8c01c66d7bbe349562d22dfca20610b248"},
-    {file = "flake8-5.0.4.tar.gz", hash = "sha256:6fbe320aad8d6b95cec8b8e47bc933004678dc63095be98528b7bdd2a9f510db"},
-]
 h11 = [
     {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
     {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
@@ -1114,10 +1065,6 @@ markupsafe = [
     {file = "MarkupSafe-2.1.1-cp39-cp39-win32.whl", hash = "sha256:d4306c36ca495956b6d568d276ac11fdd9c30a36f1b6eb928070dc5360b22e1c"},
     {file = "MarkupSafe-2.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:46d00d6cfecdde84d40e572d63735ef81423ad31184100411e6e3388d405e247"},
     {file = "MarkupSafe-2.1.1.tar.gz", hash = "sha256:7f91197cc9e48f989d12e4e6fbc46495c446636dfc81b9ccf50bb0ec74b91d4b"},
-]
-mccabe = [
-    {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
-    {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
 ]
 motor = [
     {file = "motor-3.1.1-py3-none-any.whl", hash = "sha256:01d93d7c512810dcd85f4d634a7244ba42ff6be7340c869791fe793561e734da"},
@@ -1288,10 +1235,6 @@ pyasn1 = [
     {file = "pyasn1-0.4.8-py2.py3-none-any.whl", hash = "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d"},
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
-pycodestyle = [
-    {file = "pycodestyle-2.9.1-py2.py3-none-any.whl", hash = "sha256:d1735fc58b418fd7c5f658d28d943854f8a849b01a5d0a1e6f3f3fdd0166804b"},
-    {file = "pycodestyle-2.9.1.tar.gz", hash = "sha256:2c9607871d58c76354b697b42f5d57e1ada7d261c261efac224b664affdc5785"},
-]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
     {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},
@@ -1333,10 +1276,6 @@ pydantic = [
     {file = "pydantic-1.10.2-cp39-cp39-win_amd64.whl", hash = "sha256:c1ba1afb396148bbc70e9eaa8c06c1716fdddabaf86e7027c5988bae2a829ab6"},
     {file = "pydantic-1.10.2-py3-none-any.whl", hash = "sha256:1b6ee725bd6e83ec78b1aa32c5b1fa67a3a65badddde3976bca5fe4568f27709"},
     {file = "pydantic-1.10.2.tar.gz", hash = "sha256:91b8e218852ef6007c2b98cd861601c6a09f1aa32bbbb74fab5b1c33d4a1e410"},
-]
-pyflakes = [
-    {file = "pyflakes-2.5.0-py2.py3-none-any.whl", hash = "sha256:4579f67d887f804e67edb544428f264b7b24f435b263c4614f384135cea553d2"},
-    {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
 ]
 pymongo = [
     {file = "pymongo-4.3.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:68320e5326e2b1e49dcd901e6dcbe3009b8a0fd0da0c618579a2be7cf5f2d7be"},
@@ -1474,6 +1413,24 @@ requests = [
 rsa = [
     {file = "rsa-4.9-py3-none-any.whl", hash = "sha256:90260d9058e514786967344d0ef75fa8727eed8a7d2e43ce9f4bcf1b536174f7"},
     {file = "rsa-4.9.tar.gz", hash = "sha256:e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21"},
+]
+ruff = [
+    {file = "ruff-0.0.117-py3-none-macosx_10_7_x86_64.whl", hash = "sha256:cb274e0447e91a1a7844b85cd0ef243d32732a4772140129f33bbc8891ca8577"},
+    {file = "ruff-0.0.117-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:a670ccea678f1ddd9f9cac1a5681be8bf3b33010e56058d16b270dfb9b893b95"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e0b624a7f3b617cccc89ce2fd2d7d5cb531bf9487b4a46574589883e1d0baea6"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:93d1dec6f04bbd3624624e7a48688592711cca1f725f7e85d20aca78690b19d4"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4945fb95b0e5e933a00603809cbcca86e10f67ed6a65dbfc72bdaa69009d6c7d"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:055579c91988f82733c06bdf7f55a34c6435661275809bb2ed6cff89b8edd4ca"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:55b15aa90be50a6441e25ed72de44101a1817e5be56ef555b75af14a54d745f5"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:283211cd87811a5355f67c5c6baf9b4509a5ff97c8c2112123c65c45a4d8d646"},
+    {file = "ruff-0.0.117-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d2dadc46b4cb00e6b93e673ddac5264984590581fa938ccd75517a8fac7e59ff"},
+    {file = "ruff-0.0.117-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:0ef99ddc3dacf53549f00969d7d72944ee4d454733bfb939e247a4d7fc255e7e"},
+    {file = "ruff-0.0.117-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:091caf1c083a8520c6244209c237312574f899ddc58bcf27a0a19a03a24ea6fa"},
+    {file = "ruff-0.0.117-py3-none-musllinux_1_2_i686.whl", hash = "sha256:0d07118d2e5b99d6be92b192a68188ca62353dde653e00fd3b4a05724b667e5d"},
+    {file = "ruff-0.0.117-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:79f514ae00fcb34934b5545d922a9b330dc41b085a0cc28a3f2d579279144dc7"},
+    {file = "ruff-0.0.117-py3-none-win32.whl", hash = "sha256:77415f8c20a7a4c992c0c6cb34954e14d6eb403c5170366dfebefb87b40b1f77"},
+    {file = "ruff-0.0.117-py3-none-win_amd64.whl", hash = "sha256:5b97cdf01b51bd166488a5f85af1694184d6617f4744dc59720d0b2a27c5ac09"},
+    {file = "ruff-0.0.117.tar.gz", hash = "sha256:c01d8bb7b430f91f8a0aef055228759454babb69fc28a0e232adf2ba1c6bf112"},
 ]
 setuptools = [
     {file = "setuptools-65.5.1-py3-none-any.whl", hash = "sha256:d0b9a8433464d5800cbe05094acf5c6d52a91bfac9b52bcfc4d41382be5d5d31"},

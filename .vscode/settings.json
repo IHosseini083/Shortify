@@ -1,9 +1,8 @@
 {
   "python.formatting.provider": "black",
   "editor.rulers": [88],
-  "python.linting.enabled": true,
-  "python.linting.flake8Enabled": true,
   "python.linting.mypyEnabled": true,
+  "ruff.args": ["--config=pyproject.toml"],
   "python.envFile": "${workspaceFolder}/shortify/.env",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true

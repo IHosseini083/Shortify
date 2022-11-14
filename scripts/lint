@@ -5,10 +5,10 @@ export PREFIX=""
 if [ -d '.venv' ] ; then
     export PREFIX=".venv/bin/"
 fi
-export SOURCE_FILES="shortify tests"
+export SOURCE_FILES="shortify"
 
 set -x
 
-${PREFIX}autoflake --in-place --recursive "$SOURCE_FILES"
-${PREFIX}isort --project=shortify "$SOURCE_FILES"
+${PREFIX}ruff "$SOURCE_FILES" --fix
+${PREFIX}isort "$SOURCE_FILES"
 ${PREFIX}black "$SOURCE_FILES"
