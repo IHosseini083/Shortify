@@ -6,7 +6,24 @@ The format used in this document is based on [Keep a Changelog](https://keepacha
 
 ## [Unreleased]
 
-## [0.1.6]
+## [0.1.7] (2022-11-14)
+
+### Added
+
+- Add poetry pre-commit hooks.
+
+### Changed
+
+- Bump beanie from 1.13.1 to 1.15.2, #19.
+- Bump fastapi from 0.86.0 to 0.87.0
+- Use [Ruff](https://github.com/charliermarsh/ruff) for linting.
+
+### Fixed
+
+- Fix `scripts/install` script to install dependencies when `poetry.lock` is found.
+- Use `typing.Sequence` instead of `collections.abc.Sequence`.
+
+## [0.1.6] (2022-11-10)
 
 ### Added
 
@@ -222,4 +239,5 @@ MongoDB connection string.
 [0.1.4]: https://github.com/IHosseini083/Shortify/compare/v0.1.3...v0.1.4
 [0.1.5]: https://github.com/IHosseini083/Shortify/compare/v0.1.4...v0.1.5
 [0.1.6]: https://github.com/IHosseini083/Shortify/compare/v0.1.5...v0.1.6
-[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.6...HEAD
+[0.1.7]: https://github.com/IHosseini083/Shortify/compare/v0.1.6...v0.1.7
+[unreleased]: https://github.com/IHosseini083/Shortify/compare/v0.1.7...HEAD
