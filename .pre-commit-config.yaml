@@ -33,10 +33,6 @@ repos:
     hooks:
     -   id: isort
         args: ["--profile", "black"]
--   repo: https://github.com/pycqa/flake8
-    rev: 5.0.4
-    hooks:
-    -   id: flake8
 -   repo: https://github.com/python-poetry/poetry
     rev: 1.2.2
     hooks:
