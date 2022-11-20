@@ -17,8 +17,9 @@ else:
 
 if TYPE_CHECKING:
     from starlette.types import ASGIApp, Message, Receive, Scope, Send
+    from structlog.typing import FilteringBoundLogger
 
-logger = structlog.get_logger()
+logger: "FilteringBoundLogger" = structlog.get_logger()
 
 # Context variable to store the correlation ID
 correlation_id: ContextVar[Optional[str]] = ContextVar("correlation_id", default=None)
@@ -70,7 +71,7 @@ class CorrelationMiddleware:
             id_ = self.id_generator()
         elif self.id_validator and not self.id_validator(header_value):
             id_ = self.id_generator()
-            await logger.warning(
+            await logger.awarning(
                 "Generated new correlation ID because the provided one was invalid",
                 correlation_id=id_,
             )

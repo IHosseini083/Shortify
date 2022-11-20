@@ -10,7 +10,7 @@ from shortify.app.middlewares.correlation import correlation_id
 
 LOG_LEVEL = "DEBUG" if settings.DEBUG else settings.LOG_LEVEL
 
-EventDict = structlog.types.EventDict
+EventDict = structlog.typing.EventDict
 
 
 def add_correlation_id(_, __, event_dict: EventDict) -> EventDict:
@@ -121,6 +121,5 @@ def setup_logging() -> None:
         ],
         context_class=dict,
         logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.AsyncBoundLogger,
         cache_logger_on_first_use=True,
     )
