@@ -13,7 +13,7 @@ fastapi = {extras = ["all"], version = "^0.89.1"}
 beanie = "^1.15.4"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-structlog = "^22.2.0"
+structlog = "^23.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
