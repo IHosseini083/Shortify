@@ -17,9 +17,9 @@ else:
 
 if TYPE_CHECKING:
     from starlette.types import ASGIApp, Message, Receive, Scope, Send
-    from structlog.typing import FilteringBoundLogger
+    from structlog.stdlib import BoundLogger
 
-logger: "FilteringBoundLogger" = structlog.get_logger()
+logger: "BoundLogger" = structlog.get_logger()
 
 # Context variable to store the correlation ID
 correlation_id: ContextVar[Optional[str]] = ContextVar("correlation_id", default=None)

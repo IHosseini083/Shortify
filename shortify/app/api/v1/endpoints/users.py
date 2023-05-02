@@ -42,7 +42,7 @@ class BasicUserViews:
     ) -> Dict[str, Any]:
         """Get current active user's short urls."""
         results = await ShortUrl.get_by_user(
-            user_id=self.user.id,  # type: ignore[arg-type]
+            user_id=self.user.id,
             paging=paging,
             sorting=sorting,
         )
@@ -113,7 +113,7 @@ class SuperuserViews:
         if not user:
             raise user_not_found_error()
         results = await ShortUrl.get_by_user(
-            user_id=user.id,  # type: ignore[arg-type]
+            user_id=user.id,
             paging=paging,
             sorting=sorting,
         )

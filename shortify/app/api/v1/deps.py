@@ -31,7 +31,7 @@ async def authenticate_bearer_token(token: str) -> Optional[User]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
-        )
+        ) from None
     else:
         return await User.get(cast(PydanticObjectId, data.sub))
 

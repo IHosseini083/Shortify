@@ -1,16 +1,23 @@
 import logging
 import logging.config
-from typing import Any, Dict, Tuple
+import sys
+from typing import Any, Dict, MutableMapping, Tuple
 
 import structlog
 import uvicorn
 
-from shortify.app.core.config import settings
 from shortify.app.middlewares.correlation import correlation_id
 
-LOG_LEVEL = "DEBUG" if settings.DEBUG else settings.LOG_LEVEL
+if sys.version_info >= (3, 10):
+    from typing import TypeAlias
+else:
+    from typing_extensions import TypeAlias
 
-EventDict = structlog.typing.EventDict
+from shortify.app.core.config import settings
+
+EventDict: TypeAlias = MutableMapping[str, Any]
+
+LOG_LEVEL = "DEBUG" if settings.DEBUG else str(settings.LOG_LEVEL)
 
 
 def add_correlation_id(_, __, event_dict: EventDict) -> EventDict:
@@ -26,7 +33,7 @@ def remove_color_message(_, __, event_dict: EventDict) -> EventDict:
 
 # Processors that have nothing to do with output,
 # e.g. add timestamps or log level names.
-SHARED_PROCESSORS: Tuple[structlog.types.Processor, ...] = (
+SHARED_PROCESSORS: Tuple[structlog.typing.Processor, ...] = (
     structlog.contextvars.merge_contextvars,
     structlog.stdlib.add_log_level,
     # Add extra attributes of LogRecord objects to the event dictionary
@@ -34,7 +41,9 @@ SHARED_PROCESSORS: Tuple[structlog.types.Processor, ...] = (
     # through to log output.
     structlog.stdlib.ExtraAdder(),
     # Add a timestamp in ISO 8601 format.
-    structlog.processors.TimeStamper(fmt="ISO"),
+    structlog.processors.TimeStamper(fmt="iso", utc=True),
+    remove_color_message,
+    add_correlation_id,
 )
 LOGGING_CONFIG: Dict[str, Any] = {
     "version": 1,
@@ -44,7 +53,7 @@ LOGGING_CONFIG: Dict[str, Any] = {
             "()": structlog.stdlib.ProcessorFormatter,
             # Render the final event dict as JSON.
             "processor": structlog.processors.JSONRenderer(),
-            "foreign_pre_chain": SHARED_PROCESSORS + (add_correlation_id,),
+            "foreign_pre_chain": SHARED_PROCESSORS,
         },
         "colored": {
             "()": structlog.stdlib.ProcessorFormatter,
@@ -61,38 +70,22 @@ LOGGING_CONFIG: Dict[str, Any] = {
         "default": {
             "level": LOG_LEVEL,
             "class": "logging.StreamHandler",
-            "formatter": "colored",
-        },
-        "file": {
-            "level": LOG_LEVEL,
-            "class": "logging.FileHandler",
-            "filename": settings.LOG_FILE_PATH,
-            "formatter": "json",
-        },
-        "uvicorn.access": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "access",
-        },
-        "uvicorn.default": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
+            "formatter": "json" if not settings.DEBUG else "colored",
         },
     },
     "loggers": {
         "": {
-            "handlers": ["default", "file"],
+            "handlers": ["default"],
             "level": "INFO",
             "propagate": True,
         },
         "uvicorn.error": {
-            "handlers": ["default" if not settings.DEBUG else "uvicorn.default"],
+            "handlers": ["default"],
             "level": "INFO",
             "propagate": False,
         },
         "uvicorn.access": {
-            "handlers": ["default" if not settings.DEBUG else "uvicorn.access"],
+            "handlers": ["default"],
             "level": "INFO",
             "propagate": False,
         },
@@ -100,7 +93,7 @@ LOGGING_CONFIG: Dict[str, Any] = {
 }
 
 
-def setup_logging() -> None:
+def configure_logging() -> None:
     logging.config.dictConfig(LOGGING_CONFIG)
     # noinspection PyTypeChecker
     structlog.configure(
@@ -119,7 +112,11 @@ def setup_logging() -> None:
             structlog.processors.UnicodeDecoder(),
             structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],
-        context_class=dict,
+        # `wrapper_class` is the bound logger that you get back from
+        # get_logger(). This one imitates the API of `logging.Logger`.
+        wrapper_class=structlog.stdlib.BoundLogger,
+        # `logger_factory` is used to create wrapped loggers that are used for OUTPUT.
         logger_factory=structlog.stdlib.LoggerFactory(),
+        # Effectively freeze configuration after creating the first bound logger.
         cache_logger_on_first_use=True,
     )

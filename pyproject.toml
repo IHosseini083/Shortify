@@ -9,18 +9,18 @@ repository = "https://github.com/IHosseini/Shortify"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = {extras = ["all"], version = "^0.87.0"}
-beanie = "^1.15.4"
+fastapi = {extras = ["all"], version = "^0.95.1"}
+beanie = "^1.18.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-structlog = "^22.2.0"
+structlog = "^23.1.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.10.0"
-pre-commit = "^2.20.0"
-isort = "^5.10.1"
-mypy = "^0.971"
-ruff = "^0.0.117"
+isort = "^5.12.0"
+ruff = "^0.0.264"
+mypy = "^1.2.0"
+black = "^23.3.0"
+pre-commit = "^3.2.2"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/IHosseini/Shortify/issues"
@@ -66,6 +66,9 @@ exclude = [
     "venv",
     "__pycache__",
 ]
+
+[tool.ruff.isort]
+known-third-party = ["fastapi", "pydantic", "starlette"]
 
 [tool.ruff.per-file-ignores]
 # Ignore `F401` violations in any `__init__.py` file.

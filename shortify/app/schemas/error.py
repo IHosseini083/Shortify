@@ -1,9 +1,12 @@
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from pydantic import ValidationError
 
 
-class Error(BaseModel):
+class ValidationErrorDetail(BaseModel):
     location: str
     message: str
     error_type: str
@@ -11,16 +14,13 @@ class Error(BaseModel):
 
 
 class APIValidationError(BaseModel):
-    """Schema for validation errors returned by the API with HTTP status code 422"""
-
-    errors: List[Error]
+    errors: List[ValidationErrorDetail]
 
     @classmethod
-    def from_pydantic(cls, exc: ValidationError) -> "APIValidationError":
-        """Create a new APIValidationError from a pydantic ValidationError"""
+    def from_pydantic(cls, exc: "ValidationError") -> "APIValidationError":
         return cls(
             errors=[
-                Error(
+                ValidationErrorDetail(
                     location=" -> ".join(map(str, err["loc"])),
                     message=err["msg"],
                     error_type=err["type"],
@@ -42,3 +42,10 @@ class APIValidationError(BaseModel):
                 ],
             },
         }
+
+
+class CommonHTTPError(BaseModel):
+    """JSON response model for errors raised by :class:`starlette.HTTPException`."""
+
+    message: str
+    extra: Optional[Dict[str, Any]] = None

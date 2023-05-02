@@ -13,36 +13,27 @@
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Features](#features)
 - [Requirements](#requirements)
 - [Setup](#setup)
-  - [1. Clone the repository](#1-clone-the-repository)
-  - [2. Install dependencies](#2-install-dependencies)
-  - [3. Configure environment variables](#3-configure-environment-variables)
-    - [FastAPI Application](#fastapi-application)
-    - [Logging](#logging)
-    - [MongoDB](#mongodb)
-    - [Superuser](#superuser)
-    - [Authentication](#authentication)
-    - [Short URLs](#short-urls)
-  - [4. Run the application](#4-run-the-application)
-    - [In development mode](#in-development-mode)
-    - [In production mode](#in-production-mode)
+    - [1. Clone the repository](#1-clone-the-repository)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Configure environment variables](#3-configure-environment-variables)
+        - [FastAPI Application](#fastapi-application)
+        - [Logging](#logging)
+        - [MongoDB](#mongodb)
+        - [Superuser](#superuser)
+        - [Authentication](#authentication)
+        - [Short URLs](#short-urls)
+    - [4. Run the application](#4-run-the-application)
+        - [Using Docker (Recommended)](#using-docker-recommended)
+        - [Manually](#manually)
 - [Documentation and Usage](#documentation-and-usage)
 - [Project Structure, Modifications and Best Practices](#project-structure-modifications-and-best-practices)
-  - [Creating new API routes](#creating-new-api-routes)
-  - [FastAPI Best Practices](#fastapi-best-practices)
+    - [Creating new API routes](#creating-new-api-routes)
+    - [FastAPI Best Practices](#fastapi-best-practices)
 - [Stack](#stack)
-  - [Web API](#web-api)
-  - [Logging](#logging-1)
-  - [Database](#database)
-  - [Dependency Management](#dependency-management)
-  - [Git Hooks](#git-hooks)
-  - [Linting](#linting)
-  - [Formatting](#formatting)
-  - [Type Checking](#type-checking)
 - [License](#license)
 
 ## Introduction
@@ -53,6 +44,7 @@ OAuth2 JWT authentication.
 
 ## Features
 
+- Dockerized and ready to
 - Fully async and non-blocking.
 - Uses [FastAPI] framework for API development:
 - Uses [MongoDB] as data store for users and shortened URLs.
@@ -70,11 +62,20 @@ OAuth2 JWT authentication.
 
 ## Requirements
 
+Manual installation:
+
 - Python 3.8 or higher.
 - [Poetry] for dependency management.
 - Up and running [MongoDB] instance (locally or remotely).
 
+Using Docker:
+
+- [Docker]
+- [Docker-Compose]
+
 ## Setup
+
+**Skip the first two steps if you want to use docker for running the application.**
 
 ### 1. Clone the repository
 
@@ -109,30 +110,41 @@ chmod +x scripts/install  # make the script executable
 You can see the table of all environment variables below. Those marked with `*` are required and **MUST** be set before
 running the application. Rest of them are optional and have default values.
 
+**Note:** To set any of these environment variables below, you **MUST** prefix them with `SHORTIFY_` and then set them
+in your shell or in a `.env` file placed at the root directory (e.g. you can copy `.env.example` to `.env`).
+For example, to set `DEBUG` environment variable, you can do the following:
+
+```bash
+export SHORTIFY_DEBUG=True
+```
+
+Also note that **ALL** environment variables are **CASE SENSITIVE**.
+
 #### FastAPI Application
 
-| Name                   | Description                                |               Default               |        Type        |
-|------------------------|:-------------------------------------------|:-----------------------------------:|:------------------:|
-| `PROJECT_NAME`         | Project name.                              |             `Shortify`              |      `string`      |
-| `PROJECT_VERSION`      | Project version.                           |   Current version of the project.   |      `string`      |
-| `API_V1_STR`           | API version 1 prefix.                      |                `v1`                 |      `string`      |
-| `DEBUG`                | Debug mode for development.                |               `True`                |     `boolean`      |
-| `BACKEND_CORS_ORIGINS` | Allowed origins for CORS.                  | An empty list to allow all origins. | `list` of `string` |
-| `USE_CORRELATION_ID`   | Use correlation ID middleware for logging. |               `True`                |     `boolean`      |
+| Name                 | Description                                |               Default               |        Type        |
+|----------------------|:-------------------------------------------|:-----------------------------------:|:------------------:|
+| `PROJECT_NAME`       | Project name.                              |             `Shortify`              |      `string`      |
+| `PROJECT_VERSION`    | Project version.                           |   Current version of the project.   |      `string`      |
+| `API_V1_STR`         | API version 1 prefix.                      |                `v1`                 |      `string`      |
+| `DEBUG`              | Debug mode for development.                |               `True`                |     `boolean`      |
+| `CORS_ORIGINS`       | Allowed origins for CORS.                  | An empty list to allow all origins. | `list` of `string` |
+| `USE_CORRELATION_ID` | Use correlation ID middleware for logging. |               `True`                |     `boolean`      |
+| `UVICORN_HOST`*      | Host address for uvicorn server.           |                 `-`                 |      `string`      |
+| `UVICORN_PORT`*      | Port number for uvicorn server.            |                 `-`                 |     `integer`      |
 
 #### Logging
 
 | Name            | Description                                |        Default        |   Type   |
 |-----------------|:-------------------------------------------|:---------------------:|:--------:|
 | `LOG_LEVEL`     | A logging level from the [logging] module. |        `INFO`         | `string` |
-| `LOG_FILE_PATH` | Path to the log file.                      | `"logs/shortify.log"` | `string` |
 
 #### MongoDB
 
-| Name              | Description             |           Default            |   Type   |
-|-------------------|:------------------------|:----------------------------:|:--------:|
-| `MONGODB_URI`     | MongoDB connection URI. | `mongodb://localhost:27017/` | `string` |
-| `MONGODB_DB_NAME` | MongoDB database name.  |          `shortify`          | `string` |
+| Name              | Description             |        Default        |   Type   |
+|-------------------|:------------------------|:---------------------:|:--------:|
+| `MONGODB_URI`     | MongoDB connection URI. | `mongodb://db:27017/` | `string` |
+| `MONGODB_DB_NAME` | MongoDB database name.  |      `shortify`       | `string` |
 
 #### Superuser
 
@@ -155,43 +167,34 @@ running the application. Rest of them are optional and have default values.
 |--------------------|:--------------------------------|:-------:|:---------:|
 | `URL_IDENT_LENGTH` | Length of the shortened URL ID. |   `7`   | `integer` |
 
-**Note:** To set any of these environment variables, you **MUST** prefix them with `SHORTIFY_` and then set them in your
-shell or in a `.env` file placed at `shortify/.env`.
-For example, to set `DEBUG` environment variable, you can do the following:
-
-```bash
-export SHORTIFY_DEBUG=True
-```
-
-Also note that **ALL** environment variables are **CASE SENSITIVE**.
-
 ### 4. Run the application
 
-#### In development mode
+After setting all the required and optional environment variables in `.env.example` file, copy it to `.env` file so that
+it's usable both by Docker and _Shortify_ app.
 
-If you want to run the application in development mode, you can simply run the following command in the project
-directory,
-and it will start the application with [uvicorn] server on `localhost:8000`:
+Run the following commands to start up the services:
+
+#### Using Docker (Recommended)
+
+This will start two containers, one for _Shortify_ and another one for [MongoDB].
+
+```bash
+docker compose up -d
+```
+
+#### Manually
+
+An up & running [MongoDB] instance is required and `SHORTIFY_MONGODB_URI` environment variable must
+be handled accordingly because its default value is only compatible with Docker installation of the app.
 
 ```bash
 python -m shortify
 ```
 
-If the `DEBUG` environment variable is set to `True`, the application will be run in debug mode and will be reloaded
-automatically on code changes. If you're using [VSCode], you can use the debugger to debug the application by pressing
-`F5` key.
+If the `SHORTIFY_DEBUG` environment variable is set to `True`, the application will be run in debug mode and will be
+reloaded automatically on code changes.
 
-#### In production mode
-
-But if you're going to run the application in production (e.g. On a VPS), you can use a production-ready server
-like [gunicorn]
-along-side [uvicorn]. You can do that by running the following command in the project directory:
-
-```bash
-gunicorn -k uvicorn.workers.UvicornWorker shortify.app.main:app --bind 0.0.0.0:8000
-```
-
-That will start the application on `SERVER_IP:8000`.
+Now your application is available at `http://{SHORTIFY_UVICORN_HOST}:{SHORTIFY_UVICORN_HOST}/`.
 
 ## Documentation and Usage
 
@@ -204,7 +207,6 @@ and just by looking at module names it gives you an idea of what's inside it!
 
 ```
 ./shortify
-│    .env.sample        # Sample .env file for setting environment variables
 │    __init__.py
 │    __main__.py        # Runs the development server
 ├─── app                # Primary app folder
@@ -301,42 +303,15 @@ You want to extend the application with the best practices available? check out 
 
 Frameworks and technologies used in _Shortify_
 
-### Web API
-
-- [FastAPI] (All dependencies)
-- [Pydantic]
-- [Uvicorn]
-
-### Logging
-
-- [structlog]
-
-### Database
-
-- [MongoDB]
+- [FastAPI] (Web framework)
+- [structlog] (Logging)
+- [MongoDB] (Database)
 - [beanie] (ODM)
-
-### Dependency Management
-
-- [poetry]
-
-### Git Hooks
-
-- [pre-commit]
-
-### Linting
-
-- [flake8]
-- [autoflake]
-
-### Formatting
-
-- [black]
-- [isort]
-
-### Type Checking
-
-- [mypy]
+- [poetry] (Dependency Management)
+- [pre-commit] (Git hook)
+- [ruff] (Linter)
+- [black] & [isort] (Formatter)
+- [mypy] (Type checker)
 
 ## License
 
@@ -360,7 +335,8 @@ This project is licensed under the terms of the [GPL-3.0] license.
 [full-stack-fastapi-postgresql]: https://github.com/tiangolo/full-stack-fastapi-postgresql "Full stack, modern web application generator. Using FastAPI, PostgreSQL as database, Docker, automatic HTTPS and more."
 [pydantic]: https://github.com/pydantic/pydantic "Data parsing and validation using Python type hints."
 [beanie]: <https://github.com/roman-right/beanie> "Python ODM for MongoDB."
-[flake8]: https://github.com/PyCQA/flake8
-[autoflake]: https://github.com/PyCQA/autoflake
 [isort]: <https://github.com/PyCQA/isort> "A Python utility / library to sort imports."
 [mypy]: https://github.com/python/mypy "Optional static typing for Python."
+[ruff]: https://github.com/charliermarsh/ruff "An extremely fast Python linter, written in Rust."
+[Docker]: "https://github.com/docker/"
+[Docker-Compose]: "https://github.com/docker/compose" "Define and run multi-container applications with Docker."

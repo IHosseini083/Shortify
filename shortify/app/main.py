@@ -1,3 +1,7 @@
+from contextlib import asynccontextmanager
+from http import HTTPStatus
+from typing import Set
+
 from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
@@ -6,9 +10,17 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from shortify.app import api
 from shortify.app.core.config import settings
-from shortify.app.core.logging import setup_logging
+from shortify.app.core.logging import configure_logging
 from shortify.app.db import init_db
-from shortify.app.schemas.validation_error import APIValidationError
+from shortify.app.schemas.error import APIValidationError, CommonHTTPError
+
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):  # noqa
+    configure_logging()
+    await init_db.init()
+    yield
+
 
 tags_metadata = [
     {
@@ -25,6 +37,15 @@ tags_metadata = [
     },
 ]
 
+# Common response codes
+responses: Set[int] = {
+    status.HTTP_400_BAD_REQUEST,
+    status.HTTP_401_UNAUTHORIZED,
+    status.HTTP_403_FORBIDDEN,
+    status.HTTP_404_NOT_FOUND,
+    status.HTTP_500_INTERNAL_SERVER_ERROR,
+}
+
 app = FastAPI(
     debug=settings.DEBUG,
     title=settings.PROJECT_NAME,
@@ -36,14 +57,22 @@ app = FastAPI(
     redoc_url=None,
     default_response_class=ORJSONResponse,
     openapi_tags=tags_metadata,
+    lifespan=lifespan,
     license_info={
         "name": "GNU General Public License v3.0",
         "url": "https://www.gnu.org/licenses/gpl-3.0.en.html",
     },
     responses={
         status.HTTP_422_UNPROCESSABLE_ENTITY: {
-            "description": "Unprocessable Entity (Validation Error)",
-            "model": APIValidationError,  # This will add OpenAPI schema to the docs
+            "description": "Validation Error",
+            "model": APIValidationError,  # Adds OpenAPI schema for 422 errors
+        },
+        **{
+            code: {
+                "description": HTTPStatus(code).phrase,
+                "model": CommonHTTPError,
+            }
+            for code in responses
         },
     },
 )
@@ -56,12 +85,12 @@ app.include_router(api.router)
 app.include_router(api.redirect.router)
 
 # Set all CORS enabled origins
-if settings.BACKEND_CORS_ORIGINS:
+if settings.CORS_ORIGINS:
     from fastapi.middleware.cors import CORSMiddleware
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origins=settings.CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -71,13 +100,6 @@ if settings.USE_CORRELATION_ID:
     from shortify.app.middlewares.correlation import CorrelationMiddleware
 
     app.add_middleware(CorrelationMiddleware)
-
-
-@app.on_event("startup")
-async def on_startup() -> None:
-    """Initialize services on startup."""
-    setup_logging()
-    await init_db.init()
 
 
 # Custom HTTPException handler

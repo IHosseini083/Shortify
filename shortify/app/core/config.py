@@ -1,11 +1,10 @@
-import logging
 import secrets
-from pathlib import Path
-from typing import List, Union
+from typing import List
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, MongoDsn, validator
+from pydantic import BaseSettings, EmailStr, MongoDsn
 
 from shortify import __version__
+from shortify.app.core.enums import LogLevel
 
 # This adds support for 'mongodb+srv' connection schemas when using e.g. MongoDB Atlas
 MongoDsn.allowed_schemes.add("mongodb+srv")
@@ -17,42 +16,19 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = __version__
     API_V1_STR: str = "v1"
     DEBUG: bool = True
-    BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = []
+    # CORS_ORIGINS is a JSON-formatted list of origins
+    # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000"]'
+    CORS_ORIGINS: List[str] = []
     USE_CORRELATION_ID: bool = True
 
+    UVICORN_HOST: str
+    UVICORN_PORT: int
+
     # Logging
-    LOG_LEVEL: str = "INFO"
-    LOG_FILE_PATH: str = "logs/shortify.log"
+    LOG_LEVEL: str = LogLevel.INFO
 
-    @validator("LOG_LEVEL")
-    def log_level_validator(cls, v: str) -> str:  # noqa
-        v = v.upper()
-        if not hasattr(logging, v):
-            raise ValueError(f"Invalid log level: {v!r}")
-        return v
-
-    @validator("LOG_FILE_PATH")
-    def check_log_file_path(cls, v: str) -> str:  # noqa
-        if not v.endswith(".log"):
-            raise ValueError(f"Invalid log file path: {v!r} (must end with .log)")
-        Path(v).parent.mkdir(parents=True, exist_ok=True)
-        return v
-
-    # Custom validators that have 'pre' set to 'True', will be called before
-    # all standard pydantic validators.
-    @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(
-        cls,  # noqa
-        v: Union[str, List[str]],
-    ) -> Union[str, List[str]]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        if isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
-
-    # Database
-    MONGODB_URI: MongoDsn = "mongodb://localhost:27017/"  # type: ignore[assignment]
+    # MongoDB
+    MONGODB_URI: MongoDsn = "mongodb://db:27017/"  # type: ignore[assignment]
     MONGODB_DB_NAME: str = "shortify"
 
     # Superuser
@@ -69,9 +45,10 @@ class Settings(BaseSettings):
 
     class Config:
         # Place your .env file under this path
-        env_file = "shortify/.env"
+        env_file = ".env"
         env_prefix = "SHORTIFY_"
         case_sensitive = True
 
 
-settings = Settings()
+# Missing named arguments are filled with environment variables
+settings = Settings()  # type: ignore[call-arg]
