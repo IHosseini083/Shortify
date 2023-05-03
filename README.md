@@ -44,7 +44,7 @@ OAuth2 JWT authentication.
 
 ## Features
 
-- Dockerized and ready to
+- Dockerized and ready to be deployed.
 - Fully async and non-blocking.
 - Uses [FastAPI] framework for API development:
 - Uses [MongoDB] as data store for users and shortened URLs.
@@ -75,8 +75,6 @@ Using Docker:
 
 ## Setup
 
-**Skip the first two steps if you want to use docker for running the application.**
-
 ### 1. Clone the repository
 
 ```bash
@@ -84,6 +82,8 @@ git clone https://github.com/IHosseini083/Shortify.git
 ```
 
 ### 2. Install dependencies
+
+⚠️ **Skip this step if you want to use docker for running the application.**
 
 You need to configure [Poetry] to place the virtual environment in the project directory. To do so, run the following
 command:
@@ -338,5 +338,5 @@ This project is licensed under the terms of the [GPL-3.0] license.
 [isort]: <https://github.com/PyCQA/isort> "A Python utility / library to sort imports."
 [mypy]: https://github.com/python/mypy "Optional static typing for Python."
 [ruff]: https://github.com/charliermarsh/ruff "An extremely fast Python linter, written in Rust."
-[Docker]: "https://github.com/docker/"
-[Docker-Compose]: "https://github.com/docker/compose" "Define and run multi-container applications with Docker."
+[Docker]: https://github.com/docker/
+[Docker-Compose]: https://github.com/docker/compose "Define and run multi-container applications with Docker."

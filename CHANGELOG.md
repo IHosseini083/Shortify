@@ -23,7 +23,7 @@ set by user.
 - Removed `scripts/test` script.
 - Removed `LOG_FILE_PATH` environment variable and support for log files
 
-### Chnaged
+### Changed
 
 - Removed `@app.on_event("...")` functions and use `lifespan` feature instead:
 
