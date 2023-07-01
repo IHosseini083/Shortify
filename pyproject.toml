@@ -20,7 +20,7 @@ isort = "^5.12.0"
 ruff = "^0.0.275"
 mypy = "^1.4.1"
 black = "^23.3.0"
-pre-commit = "^3.3.2"
+pre-commit = "^3.3.3"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/IHosseini/Shortify/issues"
