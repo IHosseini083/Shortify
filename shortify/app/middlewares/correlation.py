@@ -2,6 +2,7 @@
 Correlation ID middleware implementation inspired from asgi-correlation-id project:
 https://github.com/snok/asgi-correlation-id
 """
+
 import sys
 from contextvars import ContextVar
 from typing import TYPE_CHECKING, Callable, Optional
