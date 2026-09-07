@@ -1,4 +1,5 @@
 """Class-based views, borrowed from fastapi-utils project with a few modifications."""
+
 import inspect
 from typing import Any, Callable, List, Type, TypeVar, Union, get_type_hints
 
