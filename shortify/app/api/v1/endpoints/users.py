@@ -139,8 +139,19 @@ class SuperuserViews:
         # stores `hashed_password`. Passing `password` to the ODM would write a
         # plaintext field to MongoDB and leave the real hash untouched, so the
         # password would never actually change.
-        if password := update_data.pop("password", None):
+        password_changed = "password" in update_data
+        if password_changed:
+            password = update_data.pop("password")
+            if not password:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Password must not be empty",
+                )
             update_data["hashed_password"] = get_password_hash(password)
         if update_data:
             await user.set(update_data)
+        if password_changed:
+            # documents written by the old handler still carry the plaintext
+            # field next to the real hash; drop it with the password change
+            await user.update({"$unset": {"password": 1}})
         return user
