@@ -150,8 +150,8 @@ class SuperuserViews:
             update_data["hashed_password"] = get_password_hash(password)
         if update_data:
             await user.set(update_data)
-        if password_changed:
-            # documents written by the old handler still carry the plaintext
-            # field next to the real hash; drop it with the password change
-            await user.update({"$unset": {"password": 1}})
+        # Documents written by the old handler carry the plaintext field next
+        # to the real hash. Any update drops it: a document that still holds
+        # it keeps the plaintext credential in the database.
+        await user.update({"$unset": {"password": 1}})
         return user
