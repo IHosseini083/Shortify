@@ -135,5 +135,23 @@ class SuperuserViews:
         if not user:
             raise user_not_found_error()
         update_data = user_in.dict(exclude_unset=True)
-        await user.set(update_data)
+        # `UserUpdate.password` holds a plaintext password, while the document
+        # stores `hashed_password`. Passing `password` to the ODM would write a
+        # plaintext field to MongoDB and leave the real hash untouched, so the
+        # password would never actually change.
+        password_changed = "password" in update_data
+        if password_changed:
+            password = update_data.pop("password")
+            if not password:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Password must not be empty",
+                )
+            update_data["hashed_password"] = get_password_hash(password)
+        if update_data:
+            await user.set(update_data)
+        # Documents written by the old handler carry the plaintext field next
+        # to the real hash. Any update drops it: a document that still holds
+        # it keeps the plaintext credential in the database.
+        await user.update({"$unset": {"password": 1}})
         return user
